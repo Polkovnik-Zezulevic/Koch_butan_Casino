@@ -5,915 +5,928 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Коч Бутан Казино</title>
   <style>
-    /* Глобальные сбросы и переменные */
+    /* ===== СБРОС И ПЕРЕМЕННЫЕ ===== */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      font-family: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
       -webkit-tap-highlight-color: transparent;
       user-select: none;
     }
 
     :root {
-      --bg-dark: #0b0e14;
-      --card-bg: #1a1f2b;
-      --gold: #ffd966;
-      --gold-dark: #b8860b;
-      --accent: #e63946;
-      --accent-glow: #ff4d5a;
-      --text-light: #f0f3fa;
-      --text-muted: #a0aab8;
-      --border-radius: 20px;
-      --slot-size: 72px;
-      --shadow-gold: 0 0 20px rgba(255, 215, 0, 0.3);
-      --shadow-accent: 0 0 20px rgba(230, 57, 70, 0.5);
+      --bg-deep: #0a0c10;
+      --bg-panel: #12161f;
+      --bg-card: #1a1f2b;
+      --gold: #f5c542;
+      --gold-light: #ffe28a;
+      --gold-dark: #a67c00;
+      --red: #e63946;
+      --red-glow: #ff4d5a;
+      --green: #2ecc71;
+      --purple: #9b59b6;
+      --blue: #3498db;
+      --text: #eef2f9;
+      --text-dim: #7d8899;
+      --radius: 22px;
+      --slot: 68px;
+      --shadow-gold: 0 0 25px rgba(245, 197, 66, 0.4);
+      --shadow-red: 0 0 25px rgba(230, 57, 70, 0.6);
     }
 
     body {
-      background: radial-gradient(circle at 20% 20%, #1e2636, #0b0e14);
+      background: radial-gradient(circle at 30% 10%, #1b2230 0%, #07090d 80%);
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 12px;
-      color: var(--text-light);
+      color: var(--text);
+      overflow-x: hidden;
     }
 
-    /* Основной контейнер приложения */
+    /* ===== ОСНОВНОЙ КОНТЕЙНЕР ===== */
     .app {
       width: 100%;
-      max-width: 800px;
-      background: rgba(18, 23, 33, 0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-radius: 40px;
-      padding: 20px 16px 24px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), inset 0 1px 2px rgba(255, 215, 0, 0.15);
-      border: 1px solid rgba(255, 215, 0, 0.2);
-      transition: all 0.2s;
+      max-width: 820px;
+      background: linear-gradient(160deg, rgba(22, 28, 40, 0.92), rgba(10, 13, 20, 0.96));
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 36px;
+      padding: 20px 16px 22px;
+      border: 1px solid rgba(245, 197, 66, 0.18);
+      box-shadow: 0 30px 60px -15px #000, inset 0 1px 1px rgba(255, 230, 150, 0.1);
+      position: relative;
+      overflow: hidden;
     }
 
-    /* Заголовок */
-    .casino-header {
-      text-align: center;
-      margin-bottom: 20px;
+    /* Декоративные блики */
+    .app::before {
+      content: '';
+      position: absolute;
+      top: -120px;
+      right: -120px;
+      width: 240px;
+      height: 240px;
+      background: radial-gradient(circle, rgba(245, 197, 66, 0.12), transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
     }
 
-    .casino-header h1 {
-      font-size: clamp(1.8rem, 8vw, 2.8rem);
-      font-weight: 800;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      background: linear-gradient(135deg, #ffd966, #ffb347, #ffd966);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      text-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
-      line-height: 1.2;
-    }
-
-    .casino-header .subhead {
-      color: var(--text-muted);
-      font-size: clamp(0.7rem, 3vw, 0.9rem);
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      margin-top: 4px;
-      font-weight: 400;
-      border-top: 1px solid rgba(255, 215, 0, 0.3);
-      padding-top: 8px;
-      display: inline-block;
-    }
-
-    /* Табло (баланс, ставка) */
-    .balance-bar {
+    /* ===== ШАПКА ===== */
+    .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(0, 0, 0, 0.5);
-      padding: 12px 18px;
-      border-radius: 60px;
-      margin-bottom: 22px;
-      border: 1px solid rgba(255, 215, 0, 0.3);
-      box-shadow: inset 0 2px 5px rgba(0,0,0,0.6);
+      margin-bottom: 18px;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 12px;
     }
 
-    .balance-item {
+    .logo h1 {
+      font-size: clamp(1.6rem, 6vw, 2.4rem);
+      font-weight: 900;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #ffe28a, #f5c542, #d4a000);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 40px rgba(245, 197, 66, 0.5);
+      line-height: 1;
+    }
+
+    .logo .sub {
+      font-size: clamp(0.6rem, 2.5vw, 0.75rem);
+      letter-spacing: 6px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-top: 3px;
+      border-top: 1px solid rgba(245, 197, 66, 0.25);
+      padding-top: 5px;
+      display: inline-block;
+    }
+
+    /* ===== БАЛАНС (кликабельный) ===== */
+    .balance-pill {
+      background: linear-gradient(145deg, #2a3140, #1a1f2b);
+      border: 1px solid rgba(245, 197, 66, 0.4);
+      padding: 10px 20px;
+      border-radius: 60px;
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-weight: 600;
-      font-size: clamp(0.9rem, 3.5vw, 1.2rem);
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 0 #0a0d12, 0 0 15px rgba(245, 197, 66, 0.15);
+      font-weight: 800;
+      font-size: clamp(1rem, 4vw, 1.3rem);
       color: var(--gold);
-      text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+      position: relative;
+      z-index: 5;
     }
 
-    .balance-item span {
-      color: var(--text-light);
-      font-weight: 700;
+    .balance-pill:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #0a0d12, 0 0 15px rgba(245, 197, 66, 0.15);
     }
 
-    .bet-controls {
-      display: flex;
-      gap: 6px;
-      align-items: center;
+    .balance-pill .coin {
+      font-size: 1.3rem;
+      filter: drop-shadow(0 0 6px gold);
     }
 
-    .bet-btn {
-      background: #2f3a4b;
-      border: none;
-      color: white;
-      font-weight: 700;
-      font-size: 1.1rem;
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
+    .balance-pill .amount {
+      color: var(--text);
+      transition: color 0.2s;
+    }
+
+    .balance-pill .add-icon {
+      color: var(--green);
+      font-size: 1.2rem;
+      font-weight: 900;
+      opacity: 0.9;
+      margin-left: 2px;
+    }
+
+    /* ===== МОДАЛКА ПОПОЛНЕНИЯ ===== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(6px);
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      transition: 0.1s;
-      box-shadow: 0 4px 0 #0f1219;
-      border: 1px solid #4a5a6e;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: 0.25s;
+      padding: 20px;
     }
 
-    .bet-btn:active {
-      transform: translateY(2px);
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-box {
+      background: linear-gradient(160deg, #1e2534, #12161f);
+      border: 1px solid rgba(245, 197, 66, 0.4);
+      border-radius: 28px;
+      padding: 28px 22px 24px;
+      width: 100%;
+      max-width: 380px;
+      box-shadow: 0 25px 60px #000, 0 0 40px rgba(245, 197, 66, 0.1);
+      transform: scale(0.9);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      text-align: center;
+    }
+
+    .modal-overlay.active .modal-box {
+      transform: scale(1);
+    }
+
+    .modal-box h2 {
+      color: var(--gold);
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+
+    .modal-box p {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      margin-bottom: 20px;
+    }
+
+    .modal-input {
+      width: 100%;
+      background: #0d1118;
+      border: 2px solid #2f3a4b;
+      border-radius: 16px;
+      padding: 16px 18px;
+      font-size: 1.4rem;
+      color: var(--gold);
+      font-weight: 800;
+      text-align: center;
+      outline: none;
+      transition: 0.2s;
+      margin-bottom: 6px;
+    }
+
+    .modal-input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 20px rgba(245, 197, 66, 0.3);
+    }
+
+    .modal-hint {
+      font-size: 0.75rem;
+      color: var(--red-glow);
+      min-height: 18px;
+      margin-bottom: 14px;
+      font-weight: 600;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .modal-btn {
+      flex: 1;
+      padding: 14px;
+      border-radius: 16px;
+      border: none;
+      font-weight: 800;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.15s;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .modal-btn.primary {
+      background: linear-gradient(145deg, #f5c542, #d4a000);
+      color: #0a0c10;
+      box-shadow: 0 4px 0 #7a5f00, 0 0 20px rgba(245, 197, 66, 0.4);
+    }
+
+    .modal-btn.primary:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #7a5f00, 0 0 20px rgba(245, 197, 66, 0.4);
+    }
+
+    .modal-btn.secondary {
+      background: #252d3a;
+      color: var(--text-dim);
+      border: 1px solid #3f4a5a;
+      box-shadow: 0 4px 0 #0f1219;
+    }
+
+    .modal-btn.secondary:active {
+      transform: translateY(3px);
       box-shadow: 0 1px 0 #0f1219;
     }
 
-    /* Режимы */
-    .mode-tabs {
-      display: flex;
+    /* ===== ВКЛАДКИ РЕЖИМОВ ===== */
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
       gap: 8px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-      justify-content: center;
+      margin-bottom: 18px;
     }
 
     .mode-tab {
-      background: #252d3a;
-      border: 1px solid #3f4a5a;
-      color: var(--text-muted);
-      padding: 10px 18px;
-      border-radius: 60px;
+      background: linear-gradient(145deg, #1f2633, #151a23);
+      border: 1px solid #2f3a4b;
+      border-radius: 18px;
+      padding: 12px 4px;
+      color: var(--text-dim);
       font-weight: 700;
-      font-size: clamp(0.8rem, 3vw, 1rem);
+      font-size: clamp(0.7rem, 2.8vw, 0.9rem);
       cursor: pointer;
-      transition: all 0.2s;
-      flex: 1 1 auto;
-      min-width: 70px;
+      transition: all 0.25s;
       text-align: center;
-      box-shadow: 0 4px 0 #0f1219;
+      box-shadow: 0 4px 0 #0a0d12;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .mode-tab .icon {
+      font-size: clamp(1.2rem, 5vw, 1.6rem);
+      line-height: 1;
     }
 
     .mode-tab.active {
-      background: linear-gradient(145deg, #ffd966, #e6b800);
-      color: #0b0e14;
-      border-color: #ffea9e;
-      box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 4px 0 #7a5f00;
+      background: linear-gradient(145deg, #f5c542, #c9a000);
+      color: #0a0c10;
+      border-color: var(--gold-light);
+      box-shadow: 0 0 25px rgba(245, 197, 66, 0.6), 0 4px 0 #7a5f00;
+      transform: translateY(-2px);
     }
 
-    /* Игровое поле */
-    .game-area {
-      background: rgba(0, 0, 0, 0.45);
-      border-radius: var(--border-radius);
-      padding: 16px 10px;
-      margin-bottom: 20px;
-      border: 1px solid rgba(255, 215, 0, 0.2);
-      min-height: 180px;
+    .mode-tab.active .icon {
+      filter: drop-shadow(0 0 4px rgba(0,0,0,0.4));
+    }
+
+    /* ===== ИГРОВОЕ ПОЛЕ ===== */
+    .game-stage {
+      background: linear-gradient(170deg, rgba(10, 13, 20, 0.9), rgba(18, 22, 31, 0.95));
+      border-radius: 28px;
+      padding: 20px 14px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(245, 197, 66, 0.12);
+      min-height: 200px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      transition: 0.2s;
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 0 40px rgba(0,0,0,0.6);
     }
 
-    /* Слоты */
-    .slots-grid {
+    /* ===== СЛОТЫ ===== */
+    .slots-row {
       display: flex;
-      gap: 12px;
+      gap: 14px;
       justify-content: center;
       flex-wrap: wrap;
     }
 
     .slot {
-      width: var(--slot-size);
-      height: var(--slot-size);
-      background: #1b212c;
-      border-radius: 16px;
+      width: var(--slot);
+      height: var(--slot);
+      background: linear-gradient(145deg, #232c3a, #171d26);
+      border-radius: 20px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 2.4rem;
-      font-weight: 800;
-      box-shadow: inset 0 -4px 0 #0d1118, 0 8px 0 #0a0d12, 0 0 15px rgba(0,0,0,0.8);
-      border: 2px solid #3d4a5c;
-      transition: 0.2s;
-      background: linear-gradient(145deg, #1f2733, #151b24);
+      box-shadow: inset 0 -5px 0 #0a0d12, 0 8px 0 #080a0f, 0 0 20px rgba(0,0,0,0.8);
+      border: 2px solid #3a4658;
+      transition: transform 0.15s, border-color 0.2s;
       color: var(--gold);
-      text-shadow: 0 0 12px currentColor;
+      text-shadow: 0 0 14px currentColor;
       line-height: 1;
-      transform: scale(1);
     }
 
-    .slot.spin {
-      animation: blink 0.12s infinite alternate;
+    .slot.spinning {
+      animation: slotBlink 0.1s infinite alternate;
+      border-color: var(--gold);
     }
 
-    @keyframes blink {
-      from { background: #252f3f; }
-      to { background: #37445a; }
+    @keyframes slotBlink {
+      from { background: #232c3a; transform: scale(1); }
+      to { background: #384556; transform: scale(0.96); }
     }
 
-    /* Кнопка действия (основная) */
-    .action-btn {
-      background: linear-gradient(145deg, #e63946, #b11f2b);
-      border: none;
-      color: white;
-      font-weight: 900;
-      font-size: clamp(1.1rem, 5vw, 1.6rem);
-      padding: 16px 24px;
-      border-radius: 80px;
-      width: 100%;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: 0.1s;
-      box-shadow: 0 8px 0 #63101a, 0 0 25px rgba(230, 57, 70, 0.7);
-      border: 1px solid #ff7b89;
-      margin-top: 6px;
+    .slot.win {
+      animation: winPulse 0.5s ease 3;
+      border-color: var(--gold-light);
+      box-shadow: 0 0 30px rgba(245, 197, 66, 0.8);
+    }
+
+    @keyframes winPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.12); }
+    }
+
+    /* ===== АПГРЕЙД ===== */
+    .upgrade-visual {
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 12px;
-      line-height: 1.2;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-    }
-
-    .action-btn:active {
-      transform: translateY(4px);
-      box-shadow: 0 4px 0 #63101a, 0 0 25px rgba(230, 57, 70, 0.7);
-    }
-
-    .action-btn:disabled {
-      opacity: 0.5;
-      transform: translateY(4px);
-      box-shadow: 0 4px 0 #63101a, 0 0 10px rgba(230, 57, 70, 0.3);
-      pointer-events: none;
-    }
-
-    /* Для режимов апгрейд / мины / кейсы — упрощённая имитация */
-    .simple-game {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
-      width: 100%;
-    }
-
-    .upgrade-display {
-      display: flex;
-      align-items: center;
-      gap: 20px;
+      gap: 24px;
       font-size: 2rem;
-      font-weight: 800;
+      font-weight: 900;
     }
 
-    .upgrade-arrow {
+    .upgrade-visual .from {
+      color: var(--text-dim);
+      font-size: 1.6rem;
+    }
+
+    .upgrade-visual .arrow {
       color: var(--gold);
-      font-size: 2.2rem;
-      animation: pulse 1.5s infinite;
+      font-size: 2.4rem;
+      animation: arrowPulse 1.2s infinite;
     }
 
-    @keyframes pulse {
-      0% { opacity: 0.6; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.1); }
-      100% { opacity: 0.6; transform: scale(1); }
+    @keyframes arrowPulse {
+      0%, 100% { transform: translateX(0); opacity: 0.7; }
+      50% { transform: translateX(8px); opacity: 1; }
     }
 
-    .multiplier-badge {
-      background: #2b3545;
-      padding: 8px 20px;
-      border-radius: 60px;
-      font-weight: 700;
+    .upgrade-visual .to {
       color: var(--gold);
+      font-size: 2.4rem;
+      text-shadow: 0 0 20px rgba(245, 197, 66, 0.6);
+    }
+
+    .multiplier-chip {
+      margin-top: 16px;
+      background: rgba(245, 197, 66, 0.12);
       border: 1px solid var(--gold-dark);
+      padding: 8px 24px;
+      border-radius: 60px;
+      color: var(--gold);
+      font-weight: 800;
+      font-size: 1rem;
+      letter-spacing: 1px;
     }
 
-    /* Мины сетка */
+    /* ===== МИНЫ ===== */
     .mines-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: 8px;
       width: 100%;
-      max-width: 360px;
-      margin: 0 auto;
+      max-width: 340px;
     }
 
     .mine-cell {
       aspect-ratio: 1;
-      background: #252e3c;
-      border-radius: 12px;
+      background: linear-gradient(145deg, #232c3a, #161b24);
+      border-radius: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       font-weight: 700;
-      color: var(--gold);
-      box-shadow: inset 0 -3px 0 #0e1219, 0 4px 0 #0a0e13;
-      border: 1px solid #3f4d61;
+      box-shadow: inset 0 -4px 0 #0a0d12, 0 5px 0 #080a0f;
+      border: 1px solid #3a4658;
       cursor: pointer;
-      transition: 0.1s;
+      transition: all 0.15s;
+    }
+
+    .mine-cell:active {
+      transform: translateY(3px);
+      box-shadow: inset 0 -1px 0 #0a0d12, 0 2px 0 #080a0f;
     }
 
     .mine-cell.revealed {
-      background: #1c232e;
-      box-shadow: inset 0 0 15px #000000aa;
+      box-shadow: inset 0 0 20px #000, 0 0 0 1px #4a5b72;
       border-color: #4a5b72;
-      color: #8b9bb0;
+      cursor: default;
+      transform: none;
     }
 
     .mine-cell.mine {
-      background: #501a1a;
-      color: #ff6b6b;
+      background: linear-gradient(145deg, #5c1a1a, #3a0e0e);
       border-color: #b13e3e;
+      color: #ff6b6b;
+      text-shadow: 0 0 10px red;
     }
 
     .mine-cell.gem {
-      background: #1e3a2b;
-      color: #6bff9e;
+      background: linear-gradient(145deg, #1a4d2e, #0e2b19);
       border-color: #3ba55d;
+      color: #6bff9e;
+      text-shadow: 0 0 10px #6bff9e;
     }
 
-    /* Кейсы */
-    .case-display {
-      font-size: 4rem;
+    /* ===== КЕЙСЫ ===== */
+    .case-icon {
+      font-size: 4.5rem;
+      animation: caseFloat 1.6s ease-in-out infinite;
+      filter: drop-shadow(0 0 25px rgba(245, 197, 66, 0.7));
+    }
+
+    @keyframes caseFloat {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50% { transform: translateY(-12px) rotate(2deg); }
+    }
+
+    /* ===== СТАВКА И КНОПКИ ===== */
+    .controls-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+      align-items: stretch;
+    }
+
+    .bet-box {
+      flex: 1;
+      background: linear-gradient(145deg, #1a1f2b, #12161f);
+      border: 1px solid #2f3a4b;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 8px;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+    }
+
+    .bet-box button {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: none;
+      background: #2f3a4b;
+      color: var(--text);
+      font-size: 1.3rem;
+      font-weight: 900;
+      cursor: pointer;
+      transition: 0.1s;
+      box-shadow: 0 3px 0 #0a0d12;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .bet-box button:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 #0a0d12;
+    }
+
+    .bet-box .bet-value {
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: var(--gold);
+      text-shadow: 0 0 10px rgba(245, 197, 66, 0.4);
+      min-width: 50px;
       text-align: center;
-      filter: drop-shadow(0 0 20px gold);
-      animation: float 2s infinite alternate;
     }
 
-    @keyframes float {
-      from { transform: translateY(0); }
-      to { transform: translateY(-8px); }
+    /* ===== ГЛАВНАЯ КНОПКА ===== */
+    .gamble-btn {
+      width: 100%;
+      background: linear-gradient(145deg, #e63946, #a01824);
+      border: 1px solid #ff7b89;
+      border-radius: 60px;
+      padding: 18px 24px;
+      color: white;
+      font-size: clamp(1.1rem, 5vw, 1.5rem);
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: 0.12s;
+      box-shadow: 0 8px 0 #63101a, 0 0 30px rgba(230, 57, 70, 0.5);
+      text-shadow: 0 2px 6px rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      position: relative;
+      overflow: hidden;
     }
 
-    /* Рулетка (доп. анимация для кнопки) */
-    .roulette-btn {
-      background: linear-gradient(145deg, #ffd966, #d4a000);
-      color: #0b0e14;
-      box-shadow: 0 8px 0 #7a5f00, 0 0 25px rgba(255, 215, 0, 0.6);
-      border: 1px solid #ffea9e;
-      font-size: clamp(1rem, 4.5vw, 1.4rem);
-      margin-top: 12px;
-      text-shadow: none;
+    .gamble-btn::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+      transition: left 0.6s;
     }
 
-    .roulette-btn:active {
-      box-shadow: 0 4px 0 #7a5f00, 0 0 25px rgba(255, 215, 0, 0.6);
+    .gamble-btn:hover::after {
+      left: 100%;
     }
 
-    /* Адаптив */
-    @media (max-width: 480px) {
-      :root {
-        --slot-size: 60px;
-      }
-      .slot {
-        font-size: 2rem;
-      }
-      .balance-bar {
-        padding: 10px 12px;
-      }
-      .app {
-        padding: 16px 10px 20px;
-        border-radius: 28px;
-      }
+    .gamble-btn:active {
+      transform: translateY(5px);
+      box-shadow: 0 3px 0 #63101a, 0 0 30px rgba(230, 57, 70, 0.5);
     }
 
-    @media (max-width: 360px) {
-      :root {
-        --slot-size: 50px;
-      }
-      .slot {
-        font-size: 1.7rem;
-      }
-      .bet-btn {
-        width: 32px;
-        height: 32px;
-        font-size: 0.9rem;
-      }
+    .gamble-btn:disabled {
+      opacity: 0.5;
+      transform: translateY(5px);
+      box-shadow: 0 3px 0 #63101a;
+      pointer-events: none;
+      filter: grayscale(0.6);
     }
 
-    /* Уведомления */
+    /* ===== ТОСТ ===== */
     .toast {
       position: fixed;
-      bottom: 20px;
+      bottom: 30px;
       left: 50%;
-      transform: translateX(-50%);
-      background: #1e2636;
+      transform: translateX(-50%) translateY(20px);
+      background: linear-gradient(145deg, #1e2534, #12161f);
       color: var(--gold);
-      padding: 12px 24px;
+      padding: 14px 28px;
       border-radius: 60px;
-      font-weight: 700;
+      font-weight: 800;
+      font-size: 0.95rem;
       border: 1px solid var(--gold);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-      z-index: 999;
+      box-shadow: 0 15px 40px #000, 0 0 30px rgba(245, 197, 66, 0.3);
+      z-index: 2000;
       opacity: 0;
-      transition: opacity 0.3s;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
       pointer-events: none;
       white-space: nowrap;
-      max-width: 90vw;
+      max-width: 92vw;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
     .toast.show {
       opacity: 1;
+      transform: translateX(-50%) translateY(0);
     }
 
-    /* Стили для режима "кейсы" и "апгрейд" — мини-карточки */
-    .mini-message {
-      font-size: 1.2rem;
-      text-align: center;
-      color: var(--text-muted);
+    /* ===== АДАПТИВ ===== */
+    @media (max-width: 520px) {
+      :root { --slot: 58px; }
+      .slot { font-size: 2rem; border-radius: 16px; }
+      .mode-grid { gap: 6px; }
+      .mode-tab { padding: 10px 2px; border-radius: 14px; }
+      .app { padding: 16px 12px 18px; border-radius: 28px; }
+      .balance-pill { padding: 8px 16px; }
+      .upgrade-visual { font-size: 1.6rem; gap: 16px; }
+      .upgrade-visual .to { font-size: 2rem; }
+    }
+
+    @media (max-width: 380px) {
+      :root { --slot: 48px; }
+      .slot { font-size: 1.6rem; }
+      .mode-tab .icon { font-size: 1.1rem; }
+      .gamble-btn { padding: 14px 16px; }
+      .mine-cell { font-size: 1.2rem; border-radius: 10px; }
+    }
+
+    /* Анимация появления */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .game-stage > * {
+      animation: fadeUp 0.3s ease;
     }
   </style>
 </head>
 <body>
-<div class="app">
-  <div class="casino-header">
-    <h1>Коч Бутан</h1>
-    <div class="subhead">CASINO ROYALE</div>
-  </div>
 
-  <!-- Баланс и ставка -->
-  <div class="balance-bar">
-    <div class="balance-item">💰 <span id="balanceDisplay">1000</span></div>
-    <div class="bet-controls">
-      <button class="bet-btn" id="betMinus">−</button>
-      <div class="balance-item" style="min-width: 60px; justify-content: center;">
-        <span id="betDisplay">10</span>
-      </div>
-      <button class="bet-btn" id="betPlus">+</button>
+<div class="app">
+  <!-- ШАПКА -->
+  <div class="header">
+    <div class="logo">
+      <h1>Коч Бутан</h1>
+      <div class="sub">Casino</div>
+    </div>
+    <div class="balance-pill" id="balancePill">
+      <span class="coin">💰</span>
+      <span class="amount" id="balanceDisplay">1000</span>
+      <span class="add-icon">+</span>
     </div>
   </div>
 
-  <!-- Режимы -->
-  <div class="mode-tabs">
-    <button class="mode-tab active" data-mode="slots">🎰 Слоты</button>
-    <button class="mode-tab" data-mode="upgrade">⬆️ Апгрейд</button>
-    <button class="mode-tab" data-mode="mines">💣 Мины</button>
-    <button class="mode-tab" data-mode="cases">📦 Кейсы</button>
+  <!-- ВКЛАДКИ РЕЖИМОВ -->
+  <div class="mode-grid">
+    <button class="mode-tab active" data-mode="slots">
+      <span class="icon">🎰</span>
+      <span>Слоты</span>
+    </button>
+    <button class="mode-tab" data-mode="upgrade">
+      <span class="icon">⬆️</span>
+      <span>Апгрейд</span>
+    </button>
+    <button class="mode-tab" data-mode="mines">
+      <span class="icon">💣</span>
+      <span>Мины</span>
+    </button>
+    <button class="mode-tab" data-mode="cases">
+      <span class="icon">📦</span>
+      <span>Кейсы</span>
+    </button>
   </div>
 
-  <!-- Игровое поле -->
-  <div class="game-area" id="gameArea">
-    <!-- Динамическое содержимое -->
+  <!-- ИГРОВОЕ ПОЛЕ -->
+  <div class="game-stage" id="gameStage"></div>
+
+  <!-- СТАВКА -->
+  <div class="controls-row">
+    <div class="bet-box">
+      <button id="betMinus">−</button>
+      <div class="bet-value" id="betDisplay">10</div>
+      <button id="betPlus">+</button>
+    </div>
   </div>
 
-  <!-- Кнопка действия (Let's Go Gambling) -->
-  <button class="action-btn" id="actionBtn">Let's Go Gambling</button>
-
-  <!-- Дополнительная кнопка для рулетки (по заданию) -->
-  <button class="action-btn roulette-btn" id="rouletteBtn">🎲 Прокрутить рулетку</button>
+  <!-- ГЛАВНАЯ КНОПКА -->
+  <button class="gamble-btn" id="gambleBtn">
+    <span>🎲</span>
+    <span>Let's Go Gambling</span>
+  </button>
 </div>
 
+<!-- МОДАЛКА ПОПОЛНЕНИЯ -->
+<div class="modal-overlay" id="depositModal">
+  <div class="modal-box">
+    <h2>Пополнение</h2>
+    <p>Введите сумму (макс. 100)</p>
+    <input type="number" class="modal-input" id="depositInput" placeholder="0" min="1" max="100">
+    <div class="modal-hint" id="depositHint"></div>
+    <div class="modal-actions">
+      <button class="modal-btn secondary" id="depositCancel">Отмена</button>
+      <button class="modal-btn primary" id="depositConfirm">Пополнить</button>
+    </div>
+  </div>
+</div>
+
+<!-- ТОСТ -->
 <div class="toast" id="toast"></div>
 
 <script>
   (function() {
-    // ---------- Состояние ----------
+    'use strict';
+
+    // ===== СОСТОЯНИЕ =====
     let balance = 1000;
     let currentBet = 10;
-    let currentMode = 'slots'; // slots, upgrade, mines, cases
-    let isSpinning = false;
+    let currentMode = 'slots';
+    let isBusy = false;
     let minesState = {
       active: false,
       minesCount: 3,
       revealed: [],
       minePositions: [],
-      currentMultiplier: 1.0
+      multiplier: 1.0
     };
 
-    // DOM элементы
+    // DOM
     const balanceDisplay = document.getElementById('balanceDisplay');
+    const balancePill = document.getElementById('balancePill');
     const betDisplay = document.getElementById('betDisplay');
-    const gameArea = document.getElementById('gameArea');
-    const actionBtn = document.getElementById('actionBtn');
-    const rouletteBtn = document.getElementById('rouletteBtn');
+    const gameStage = document.getElementById('gameStage');
+    const gambleBtn = document.getElementById('gambleBtn');
     const modeTabs = document.querySelectorAll('.mode-tab');
     const toastEl = document.getElementById('toast');
+    const depositModal = document.getElementById('depositModal');
+    const depositInput = document.getElementById('depositInput');
+    const depositHint = document.getElementById('depositHint');
+    const depositConfirm = document.getElementById('depositConfirm');
+    const depositCancel = document.getElementById('depositCancel');
 
-    // ---------- Вспомогательные ----------
-    function showToast(msg) {
+    // ===== УТИЛИТЫ =====
+    function showToast(msg, type = 'info') {
       toastEl.textContent = msg;
+      toastEl.style.color = type === 'win' ? '#6bff9e' : type === 'lose' ? '#ff6b6b' : 'var(--gold)';
+      toastEl.style.borderColor = type === 'win' ? '#3ba55d' : type === 'lose' ? '#b13e3e' : 'var(--gold)';
       toastEl.classList.add('show');
-      clearTimeout(window.toastTimeout);
-      window.toastTimeout = setTimeout(() => toastEl.classList.remove('show'), 2000);
+      clearTimeout(window._toastT);
+      window._toastT = setTimeout(() => toastEl.classList.remove('show'), 2200);
     }
 
     function updateBalanceUI() {
       balanceDisplay.textContent = balance;
-      if (balance < currentBet) {
-        // не блокируем кнопку, но при спине проверим
-      }
+      // Анимация пульсации при изменении
+      balanceDisplay.style.transform = 'scale(1.15)';
+      balanceDisplay.style.color = 'var(--gold-light)';
+      setTimeout(() => {
+        balanceDisplay.style.transform = 'scale(1)';
+        balanceDisplay.style.color = '';
+      }, 200);
     }
 
     function updateBetUI() {
       betDisplay.textContent = currentBet;
     }
 
-    function setBet(value) {
-      if (value < 1) value = 1;
-      if (value > balance) value = balance;
-      currentBet = value;
+    function setBet(val) {
+      if (val < 1) val = 1;
+      if (val > balance) val = balance;
+      if (val > 1000000) val = 1000000;
+      currentBet = val;
       updateBetUI();
     }
 
-    // ---------- Отрисовка игрового поля в зависимости от режима ----------
-    function renderGameArea() {
+    // ===== МОДАЛКА ПОПОЛНЕНИЯ =====
+    balancePill.addEventListener('click', () => {
+      depositModal.classList.add('active');
+      depositInput.value = '';
+      depositHint.textContent = '';
+      depositInput.focus();
+    });
+
+    depositCancel.addEventListener('click', () => {
+      depositModal.classList.remove('active');
+    });
+
+    depositModal.addEventListener('click', (e) => {
+      if (e.target === depositModal) depositModal.classList.remove('active');
+    });
+
+    depositConfirm.addEventListener('click', () => {
+      const raw = depositInput.value.trim();
+      const num = Number(raw);
+      if (!raw || isNaN(num) || num <= 0) {
+        depositHint.textContent = 'Введите корректную сумму';
+        return;
+      }
+      if (num > 100) {
+        depositHint.textContent = '⚠️ Максимальная сумма пополнения — 100';
+        return;
+      }
+      balance += Math.floor(num);
+      updateBalanceUI();
+      depositModal.classList.remove('active');
+      showToast(`✅ Баланс пополнен на ${Math.floor(num)}`, 'win');
+    });
+
+    depositInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') depositConfirm.click();
+    });
+
+    // ===== РЕНДЕР ИГРОВОГО ПОЛЯ =====
+    function renderStage() {
       if (currentMode === 'slots') {
-        gameArea.innerHTML = `
-          <div class="slots-grid">
+        gameStage.innerHTML = `
+          <div class="slots-row">
             <div class="slot" id="slot0">🍒</div>
             <div class="slot" id="slot1">🍋</div>
             <div class="slot" id="slot2">🍊</div>
           </div>
         `;
       } else if (currentMode === 'upgrade') {
-        gameArea.innerHTML = `
-          <div class="simple-game">
-            <div class="upgrade-display">
-              <span>10</span>
-              <span class="upgrade-arrow">→</span>
-              <span style="color: var(--gold);">20</span>
-            </div>
-            <div class="multiplier-badge">x2 множитель</div>
-            <div class="mini-message">Нажми Let's Go Gambling</div>
+        gameStage.innerHTML = `
+          <div class="upgrade-visual">
+            <span class="from">10</span>
+            <span class="arrow">→</span>
+            <span class="to">20</span>
           </div>
+          <div class="multiplier-chip">x2 МНОЖИТЕЛЬ</div>
         `;
       } else if (currentMode === 'mines') {
-        // сброс состояния мин при переключении
         minesState.active = false;
         minesState.revealed = [];
         minesState.minePositions = [];
-        minesState.currentMultiplier = 1.0;
+        minesState.multiplier = 1.0;
         renderMinesGrid();
       } else if (currentMode === 'cases') {
-        gameArea.innerHTML = `
-          <div class="simple-game">
-            <div class="case-display">📦</div>
-            <div class="multiplier-badge">Случайный приз</div>
-            <div class="mini-message">Нажми Let's Go Gambling</div>
-          </div>
+        gameStage.innerHTML = `
+          <div class="case-icon">📦</div>
         `;
       }
-      // Обновляем кнопку действия в зависимости от режима (мины иногда меняют текст)
       if (currentMode !== 'mines' || !minesState.active) {
-        actionBtn.textContent = "Let's Go Gambling";
+        gambleBtn.innerHTML = '<span>🎲</span><span>Let\'s Go Gambling</span>';
       }
+      gambleBtn.disabled = false;
+      isBusy = false;
     }
 
-    // ---------- Логика для слотов ----------
+    // ===== СЛОТЫ =====
     function spinSlots() {
-      if (isSpinning) return;
-      if (balance < currentBet) {
-        showToast('Недостаточно средств');
-        return;
-      }
+      if (isBusy) return;
+      if (balance < currentBet) { showToast('Недостаточно средств', 'lose'); return; }
+      isBusy = true;
       balance -= currentBet;
       updateBalanceUI();
-      isSpinning = true;
-      actionBtn.disabled = true;
+      gambleBtn.disabled = true;
 
-      const symbols = ['🍒', '🍋', '🍊', '🍇', '💎', '7️⃣', '🔔'];
+      const symbols = ['🍒', '🍋', '🍊', '🍇', '💎', '7️⃣', '🔔', '⭐'];
       const slotEls = [
         document.getElementById('slot0'),
         document.getElementById('slot1'),
         document.getElementById('slot2')
       ];
+      slotEls.forEach(el => { el.classList.add('spinning'); el.classList.remove('win'); });
 
-      // Анимация
-      let spinCount = 0;
-      const spinInterval = setInterval(() => {
+      let ticks = 0;
+      const interval = setInterval(() => {
         slotEls.forEach(el => {
           el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
         });
-        spinCount++;
-        if (spinCount > 12) {
-          clearInterval(spinInterval);
-          // финальный результат
-          const finalSymbols = [];
-          slotEls.forEach((el, i) => {
-            const sym = symbols[Math.floor(Math.random() * symbols.length)];
-            el.textContent = sym;
-            finalSymbols.push(sym);
+        ticks++;
+        if (ticks >= 14) {
+          clearInterval(interval);
+          const finals = [];
+          slotEls.forEach(el => {
+            const s = symbols[Math.floor(Math.random() * symbols.length)];
+            el.textContent = s;
+            finals.push(s);
+            el.classList.remove('spinning');
           });
 
-          // Определяем выигрыш
           let win = 0;
-          if (finalSymbols[0] === finalSymbols[1] && finalSymbols[1] === finalSymbols[2]) {
-            // три одинаковых
+          if (finals[0] === finals[1] && finals[1] === finals[2]) {
             win = currentBet * 10;
-            showToast(`🎉 ДЖЕКПОТ! +${win}`);
-          } else if (finalSymbols[0] === finalSymbols[1] || finalSymbols[1] === finalSymbols[2] || finalSymbols[0] === finalSymbols[2]) {
+            slotEls.forEach(el => el.classList.add('win'));
+            showToast(`🎉 ДЖЕКПОТ! +${win}`, 'win');
+          } else if (finals[0] === finals[1] || finals[1] === finals[2] || finals[0] === finals[2]) {
             win = currentBet * 2;
-            showToast(`✨ Пара! +${win}`);
+            showToast(`✨ Пара! +${win}`, 'win');
           } else {
-            showToast('Попробуй ещё раз');
+            showToast('😢 Не повезло', 'lose');
           }
 
           if (win > 0) {
             balance += win;
             updateBalanceUI();
           }
-          isSpinning = false;
-          actionBtn.disabled = false;
+          isBusy = false;
+          gambleBtn.disabled = false;
         }
-      }, 80);
+      }, 75);
     }
 
-    // ---------- Апгрейд (имитация) ----------
-    function upgrade() {
-      if (balance < currentBet) {
-        showToast('Недостаточно средств');
-        return;
-      }
+    // ===== АПГРЕЙД =====
+    function doUpgrade() {
+      if (isBusy) return;
+      if (balance < currentBet) { showToast('Недостаточно средств', 'lose'); return; }
+      isBusy = true;
       balance -= currentBet;
       updateBalanceUI();
-      actionBtn.disabled = true;
+      gambleBtn.disabled = true;
 
-      // Анимация: обновляем дисплей
-      const upgradeDisplay = gameArea.querySelector('.upgrade-display');
-      if (upgradeDisplay) {
-        upgradeDisplay.innerHTML = `<span>?</span><span class="upgrade-arrow">→</span><span>?</span>`;
-      }
+      const vis = gameStage.querySelector('.upgrade-visual');
+      if (vis) vis.innerHTML = `<span class="from">?</span><span class="arrow">→</span><span class="to">?</span>`;
 
       setTimeout(() => {
-        const success = Math.random() < 0.45; // 45% шанс
+        const success = Math.random() < 0.45;
         if (success) {
           const win = currentBet * 2;
           balance += win;
           updateBalanceUI();
-          showToast(`✅ Апгрейд удался! +${win}`);
+          showToast(`✅ Апгрейд! +${win}`, 'win');
         } else {
-          showToast('❌ Апгрейд не удался');
-        }
-        // Восстановим дисплей
-        if (upgradeDisplay) {
-          upgradeDisplay.innerHTML = `<span>10</span><span class="upgrade-arrow">→</span><span style="color: var(--gold);">20</span>`;
-        }
-        actionBtn.disabled = false;
-      }, 800);
-    }
-
-    // ---------- Мины (упрощённая логика) ----------
-    function renderMinesGrid() {
-      const totalCells = 25; // 5x5
-      const minesCount = minesState.active ? minesState.minesCount : 3;
-      const gridHtml = [];
-      for (let i = 0; i < totalCells; i++) {
-        let cellContent = '';
-        let extraClass = '';
-        if (minesState.revealed.includes(i)) {
-          if (minesState.minePositions.includes(i)) {
-            cellContent = '💣';
-            extraClass = 'mine';
-          } else {
-            cellContent = '💎';
-            extraClass = 'gem';
-          }
-        }
-        gridHtml.push(`<div class="mine-cell ${extraClass}" data-index="${i}">${cellContent}</div>`);
-      }
-      gameArea.innerHTML = `<div class="mines-grid">${gridHtml.join('')}</div>`;
-      if (minesState.active) {
-        // Если игра активна, добавляем обработчики на клики
-        document.querySelectorAll('.mine-cell').forEach(cell => {
-          cell.addEventListener('click', onMineCellClick);
-        });
-      } else {
-        // Если не активна — клики не нужны (или можно начать игру)
-        document.querySelectorAll('.mine-cell').forEach(cell => {
-          cell.addEventListener('click', () => {
-            if (!minesState.active) {
-              showToast('Нажми Let\'s Go Gambling чтобы начать');
-            }
-          });
-        });
-      }
-    }
-
-    function onMineCellClick(e) {
-      if (!minesState.active) return;
-      const index = parseInt(e.currentTarget.dataset.index);
-      if (minesState.revealed.includes(index)) return;
-
-      // Проверяем, мина или нет
-      if (minesState.minePositions.includes(index)) {
-        // Проигрыш
-        minesState.revealed.push(index);
-        minesState.active = false;
-        renderMinesGrid();
-        showToast('💥 Мина! Ты проиграл');
-        actionBtn.textContent = "Let's Go Gambling";
-        // Показываем все мины
-        minesState.minePositions.forEach(pos => {
-          if (!minesState.revealed.includes(pos)) {
-            minesState.revealed.push(pos);
-          }
-        });
-        renderMinesGrid(); // перерисовываем с минами
-        // Меняем обработчики (игра окончена)
-        document.querySelectorAll('.mine-cell').forEach(cell => {
-          cell.removeEventListener('click', onMineCellClick);
-        });
-      } else {
-        // Безопасная ячейка
-        minesState.revealed.push(index);
-        minesState.currentMultiplier = 1 + (minesState.revealed.length * 0.2);
-        renderMinesGrid();
-        // Проверяем победу (все безопасные открыты)
-        const safeTotal = 25 - minesState.minesCount;
-        if (minesState.revealed.length === safeTotal) {
-          // Победа
-          const win = Math.floor(currentBet * minesState.currentMultiplier);
-          balance += win;
-          updateBalanceUI();
-          minesState.active = false;
-          showToast(`🏆 Победа! +${win}`);
-          actionBtn.textContent = "Let's Go Gambling";
-          renderMinesGrid();
-        } else {
-          showToast(`Безопасно! Множитель x${minesState.currentMultiplier.toFixed(1)}`);
-        }
-      }
-    }
-
-    function startMines() {
-      if (balance < currentBet) {
-        showToast('Недостаточно средств');
-        return;
-      }
-      if (minesState.active) return;
-
-      balance -= currentBet;
-      updateBalanceUI();
-
-      // Генерируем позиции мин
-      const total = 25;
-      const minesCount = 3;
-      const positions = new Set();
-      while (positions.size < minesCount) {
-        positions.add(Math.floor(Math.random() * total));
-      }
-      minesState.minePositions = Array.from(positions);
-      minesState.revealed = [];
-      minesState.active = true;
-      minesState.currentMultiplier = 1.0;
-      renderMinesGrid();
-
-      actionBtn.textContent = "Игра идёт...";
-      // обработчики уже добавлены в renderMinesGrid
-    }
-
-    // ---------- Кейсы ----------
-    function openCase() {
-      if (balance < currentBet) {
-        showToast('Недостаточно средств');
-        return;
-      }
-      balance -= currentBet;
-      updateBalanceUI();
-      actionBtn.disabled = true;
-
-      const caseDisplay = gameArea.querySelector('.case-display');
-      if (caseDisplay) {
-        caseDisplay.textContent = '🎁';
-        caseDisplay.style.animation = 'none';
-        caseDisplay.offsetHeight; // reflow
-        caseDisplay.style.animation = 'float 0.5s infinite alternate';
-      }
-
-      setTimeout(() => {
-        const prizes = [
-          { name: 'Ничего', value: 0, emoji: '💨' },
-          { name: 'x0.5', value: Math.floor(currentBet * 0.5), emoji: '🪙' },
-          { name: 'x2', value: currentBet * 2, emoji: '💰' },
-          { name: 'x5', value: currentBet * 5, emoji: '💎' },
-          { name: 'ДЖЕКПОТ x10', value: currentBet * 10, emoji: '👑' }
-        ];
-        const rand = Math.random();
-        let prize;
-        if (rand < 0.4) prize = prizes[0];
-        else if (rand < 0.7) prize = prizes[1];
-        else if (rand < 0.9) prize = prizes[2];
-        else if (rand < 0.98) prize = prizes[3];
-        else prize = prizes[4];
-
-        if (prize.value > 0) {
-          balance += prize.value;
-          updateBalanceUI();
-          showToast(`${prize.emoji} ${prize.name}! +${prize.value}`);
-        } else {
-          showToast(`${prize.emoji} Пусто...`);
-        }
-
-        if (caseDisplay) {
-          caseDisplay.textContent = '📦';
-          caseDisplay.style.animation = 'float 2s infinite alternate';
-        }
-        actionBtn.disabled = false;
-      }, 1000);
-    }
-
-    // ---------- Обработчики ----------
-    function handleAction() {
-      if (currentMode === 'slots') {
-        spinSlots();
-      } else if (currentMode === 'upgrade') {
-        upgrade();
-      } else if (currentMode === 'mines') {
-        if (!minesState.active) {
-          startMines();
-        } else {
-          // Если игра активна, кнопка не должна запускать новую игру, но можно сделать "забрать выигрыш"? 
-          // По заданию не требуется, оставим инфо
-          showToast('Игра в мины уже идёт. Открывай ячейки!');
-        }
-      } else if (currentMode === 'cases') {
-        openCase();
-      }
-    }
-
-    // Переключение режимов
-    modeTabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        if (isSpinning) return; // блокируем во время спина
-        // Сброс состояния мин при переключении
-        if (currentMode === 'mines' && minesState.active) {
-          // Возвращаем ставку? Нет, просто сбрасываем (потеря ставки, но это имитация)
-          minesState.active = false;
-          minesState.revealed = [];
-          minesState.minePositions = [];
-        }
-        modeTabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        currentMode = tab.dataset.mode;
-        renderGameArea();
-        // Восстанавливаем кнопку
-        actionBtn.disabled = false;
-        isSpinning = false;
-      });
-    });
-
-    // Кнопки ставки
-    document.getElementById('betMinus').addEventListener('click', () => {
-      setBet(currentBet - 10);
-    });
-    document.getElementById('betPlus').addEventListener('click', () => {
-      setBet(currentBet + 10);
-    });
-
-    // Основная кнопка
-    actionBtn.addEventListener('click', handleAction);
-
-    // Кнопка рулетки (доп. функционал — просто имитация прокрута)
-    rouletteBtn.addEventListener('click', () => {
-      if (isSpinning) return;
-      if (balance < currentBet) {
-        showToast('Недостаточно средств');
-        return;
-      }
-      balance -= currentBet;
-      updateBalanceUI();
-      showToast('🎲 Рулетка крутится...');
-      rouletteBtn.disabled = true;
-      setTimeout(() => {
-        const win = Math.random() < 0.5 ? currentBet * 2 : 0;
-        if (win > 0) {
-          balance += win;
-          updateBalanceUI();
-          showToast(`🎉 Выигрыш ${win}!`);
-        } else {
-          showToast('😢 Не повезло');
-        }
-        rouletteBtn.disabled = false;
-      }, 700);
-    });
-
-    // Инициализация
-    function init() {
-      updateBalanceUI();
-      updateBetUI();
-      renderGameArea();
-    }
-
-    init();
-  })();
-</script>
-</body>
-</html>
+         
