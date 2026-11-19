@@ -1,1 +1,919 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Коч Бутан Казино</title>
+  <style>
+    /* Глобальные сбросы и переменные */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
 
+    :root {
+      --bg-dark: #0b0e14;
+      --card-bg: #1a1f2b;
+      --gold: #ffd966;
+      --gold-dark: #b8860b;
+      --accent: #e63946;
+      --accent-glow: #ff4d5a;
+      --text-light: #f0f3fa;
+      --text-muted: #a0aab8;
+      --border-radius: 20px;
+      --slot-size: 72px;
+      --shadow-gold: 0 0 20px rgba(255, 215, 0, 0.3);
+      --shadow-accent: 0 0 20px rgba(230, 57, 70, 0.5);
+    }
+
+    body {
+      background: radial-gradient(circle at 20% 20%, #1e2636, #0b0e14);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      color: var(--text-light);
+    }
+
+    /* Основной контейнер приложения */
+    .app {
+      width: 100%;
+      max-width: 800px;
+      background: rgba(18, 23, 33, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 40px;
+      padding: 20px 16px 24px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), inset 0 1px 2px rgba(255, 215, 0, 0.15);
+      border: 1px solid rgba(255, 215, 0, 0.2);
+      transition: all 0.2s;
+    }
+
+    /* Заголовок */
+    .casino-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .casino-header h1 {
+      font-size: clamp(1.8rem, 8vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #ffd966, #ffb347, #ffd966);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+      line-height: 1.2;
+    }
+
+    .casino-header .subhead {
+      color: var(--text-muted);
+      font-size: clamp(0.7rem, 3vw, 0.9rem);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-top: 4px;
+      font-weight: 400;
+      border-top: 1px solid rgba(255, 215, 0, 0.3);
+      padding-top: 8px;
+      display: inline-block;
+    }
+
+    /* Табло (баланс, ставка) */
+    .balance-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 12px 18px;
+      border-radius: 60px;
+      margin-bottom: 22px;
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.6);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .balance-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      font-size: clamp(0.9rem, 3.5vw, 1.2rem);
+      color: var(--gold);
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+    }
+
+    .balance-item span {
+      color: var(--text-light);
+      font-weight: 700;
+    }
+
+    .bet-controls {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .bet-btn {
+      background: #2f3a4b;
+      border: none;
+      color: white;
+      font-weight: 700;
+      font-size: 1.1rem;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.1s;
+      box-shadow: 0 4px 0 #0f1219;
+      border: 1px solid #4a5a6e;
+    }
+
+    .bet-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 #0f1219;
+    }
+
+    /* Режимы */
+    .mode-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .mode-tab {
+      background: #252d3a;
+      border: 1px solid #3f4a5a;
+      color: var(--text-muted);
+      padding: 10px 18px;
+      border-radius: 60px;
+      font-weight: 700;
+      font-size: clamp(0.8rem, 3vw, 1rem);
+      cursor: pointer;
+      transition: all 0.2s;
+      flex: 1 1 auto;
+      min-width: 70px;
+      text-align: center;
+      box-shadow: 0 4px 0 #0f1219;
+    }
+
+    .mode-tab.active {
+      background: linear-gradient(145deg, #ffd966, #e6b800);
+      color: #0b0e14;
+      border-color: #ffea9e;
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 4px 0 #7a5f00;
+    }
+
+    /* Игровое поле */
+    .game-area {
+      background: rgba(0, 0, 0, 0.45);
+      border-radius: var(--border-radius);
+      padding: 16px 10px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(255, 215, 0, 0.2);
+      min-height: 180px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: 0.2s;
+    }
+
+    /* Слоты */
+    .slots-grid {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .slot {
+      width: var(--slot-size);
+      height: var(--slot-size);
+      background: #1b212c;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.4rem;
+      font-weight: 800;
+      box-shadow: inset 0 -4px 0 #0d1118, 0 8px 0 #0a0d12, 0 0 15px rgba(0,0,0,0.8);
+      border: 2px solid #3d4a5c;
+      transition: 0.2s;
+      background: linear-gradient(145deg, #1f2733, #151b24);
+      color: var(--gold);
+      text-shadow: 0 0 12px currentColor;
+      line-height: 1;
+      transform: scale(1);
+    }
+
+    .slot.spin {
+      animation: blink 0.12s infinite alternate;
+    }
+
+    @keyframes blink {
+      from { background: #252f3f; }
+      to { background: #37445a; }
+    }
+
+    /* Кнопка действия (основная) */
+    .action-btn {
+      background: linear-gradient(145deg, #e63946, #b11f2b);
+      border: none;
+      color: white;
+      font-weight: 900;
+      font-size: clamp(1.1rem, 5vw, 1.6rem);
+      padding: 16px 24px;
+      border-radius: 80px;
+      width: 100%;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: 0.1s;
+      box-shadow: 0 8px 0 #63101a, 0 0 25px rgba(230, 57, 70, 0.7);
+      border: 1px solid #ff7b89;
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      line-height: 1.2;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .action-btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 4px 0 #63101a, 0 0 25px rgba(230, 57, 70, 0.7);
+    }
+
+    .action-btn:disabled {
+      opacity: 0.5;
+      transform: translateY(4px);
+      box-shadow: 0 4px 0 #63101a, 0 0 10px rgba(230, 57, 70, 0.3);
+      pointer-events: none;
+    }
+
+    /* Для режимов апгрейд / мины / кейсы — упрощённая имитация */
+    .simple-game {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+    }
+
+    .upgrade-display {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 2rem;
+      font-weight: 800;
+    }
+
+    .upgrade-arrow {
+      color: var(--gold);
+      font-size: 2.2rem;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.6; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.1); }
+      100% { opacity: 0.6; transform: scale(1); }
+    }
+
+    .multiplier-badge {
+      background: #2b3545;
+      padding: 8px 20px;
+      border-radius: 60px;
+      font-weight: 700;
+      color: var(--gold);
+      border: 1px solid var(--gold-dark);
+    }
+
+    /* Мины сетка */
+    .mines-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      width: 100%;
+      max-width: 360px;
+      margin: 0 auto;
+    }
+
+    .mine-cell {
+      aspect-ratio: 1;
+      background: #252e3c;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--gold);
+      box-shadow: inset 0 -3px 0 #0e1219, 0 4px 0 #0a0e13;
+      border: 1px solid #3f4d61;
+      cursor: pointer;
+      transition: 0.1s;
+    }
+
+    .mine-cell.revealed {
+      background: #1c232e;
+      box-shadow: inset 0 0 15px #000000aa;
+      border-color: #4a5b72;
+      color: #8b9bb0;
+    }
+
+    .mine-cell.mine {
+      background: #501a1a;
+      color: #ff6b6b;
+      border-color: #b13e3e;
+    }
+
+    .mine-cell.gem {
+      background: #1e3a2b;
+      color: #6bff9e;
+      border-color: #3ba55d;
+    }
+
+    /* Кейсы */
+    .case-display {
+      font-size: 4rem;
+      text-align: center;
+      filter: drop-shadow(0 0 20px gold);
+      animation: float 2s infinite alternate;
+    }
+
+    @keyframes float {
+      from { transform: translateY(0); }
+      to { transform: translateY(-8px); }
+    }
+
+    /* Рулетка (доп. анимация для кнопки) */
+    .roulette-btn {
+      background: linear-gradient(145deg, #ffd966, #d4a000);
+      color: #0b0e14;
+      box-shadow: 0 8px 0 #7a5f00, 0 0 25px rgba(255, 215, 0, 0.6);
+      border: 1px solid #ffea9e;
+      font-size: clamp(1rem, 4.5vw, 1.4rem);
+      margin-top: 12px;
+      text-shadow: none;
+    }
+
+    .roulette-btn:active {
+      box-shadow: 0 4px 0 #7a5f00, 0 0 25px rgba(255, 215, 0, 0.6);
+    }
+
+    /* Адаптив */
+    @media (max-width: 480px) {
+      :root {
+        --slot-size: 60px;
+      }
+      .slot {
+        font-size: 2rem;
+      }
+      .balance-bar {
+        padding: 10px 12px;
+      }
+      .app {
+        padding: 16px 10px 20px;
+        border-radius: 28px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      :root {
+        --slot-size: 50px;
+      }
+      .slot {
+        font-size: 1.7rem;
+      }
+      .bet-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 0.9rem;
+      }
+    }
+
+    /* Уведомления */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1e2636;
+      color: var(--gold);
+      padding: 12px 24px;
+      border-radius: 60px;
+      font-weight: 700;
+      border: 1px solid var(--gold);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+      z-index: 999;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      white-space: nowrap;
+      max-width: 90vw;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+
+    /* Стили для режима "кейсы" и "апгрейд" — мини-карточки */
+    .mini-message {
+      font-size: 1.2rem;
+      text-align: center;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <div class="casino-header">
+    <h1>Коч Бутан</h1>
+    <div class="subhead">CASINO ROYALE</div>
+  </div>
+
+  <!-- Баланс и ставка -->
+  <div class="balance-bar">
+    <div class="balance-item">💰 <span id="balanceDisplay">1000</span></div>
+    <div class="bet-controls">
+      <button class="bet-btn" id="betMinus">−</button>
+      <div class="balance-item" style="min-width: 60px; justify-content: center;">
+        <span id="betDisplay">10</span>
+      </div>
+      <button class="bet-btn" id="betPlus">+</button>
+    </div>
+  </div>
+
+  <!-- Режимы -->
+  <div class="mode-tabs">
+    <button class="mode-tab active" data-mode="slots">🎰 Слоты</button>
+    <button class="mode-tab" data-mode="upgrade">⬆️ Апгрейд</button>
+    <button class="mode-tab" data-mode="mines">💣 Мины</button>
+    <button class="mode-tab" data-mode="cases">📦 Кейсы</button>
+  </div>
+
+  <!-- Игровое поле -->
+  <div class="game-area" id="gameArea">
+    <!-- Динамическое содержимое -->
+  </div>
+
+  <!-- Кнопка действия (Let's Go Gambling) -->
+  <button class="action-btn" id="actionBtn">Let's Go Gambling</button>
+
+  <!-- Дополнительная кнопка для рулетки (по заданию) -->
+  <button class="action-btn roulette-btn" id="rouletteBtn">🎲 Прокрутить рулетку</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  (function() {
+    // ---------- Состояние ----------
+    let balance = 1000;
+    let currentBet = 10;
+    let currentMode = 'slots'; // slots, upgrade, mines, cases
+    let isSpinning = false;
+    let minesState = {
+      active: false,
+      minesCount: 3,
+      revealed: [],
+      minePositions: [],
+      currentMultiplier: 1.0
+    };
+
+    // DOM элементы
+    const balanceDisplay = document.getElementById('balanceDisplay');
+    const betDisplay = document.getElementById('betDisplay');
+    const gameArea = document.getElementById('gameArea');
+    const actionBtn = document.getElementById('actionBtn');
+    const rouletteBtn = document.getElementById('rouletteBtn');
+    const modeTabs = document.querySelectorAll('.mode-tab');
+    const toastEl = document.getElementById('toast');
+
+    // ---------- Вспомогательные ----------
+    function showToast(msg) {
+      toastEl.textContent = msg;
+      toastEl.classList.add('show');
+      clearTimeout(window.toastTimeout);
+      window.toastTimeout = setTimeout(() => toastEl.classList.remove('show'), 2000);
+    }
+
+    function updateBalanceUI() {
+      balanceDisplay.textContent = balance;
+      if (balance < currentBet) {
+        // не блокируем кнопку, но при спине проверим
+      }
+    }
+
+    function updateBetUI() {
+      betDisplay.textContent = currentBet;
+    }
+
+    function setBet(value) {
+      if (value < 1) value = 1;
+      if (value > balance) value = balance;
+      currentBet = value;
+      updateBetUI();
+    }
+
+    // ---------- Отрисовка игрового поля в зависимости от режима ----------
+    function renderGameArea() {
+      if (currentMode === 'slots') {
+        gameArea.innerHTML = `
+          <div class="slots-grid">
+            <div class="slot" id="slot0">🍒</div>
+            <div class="slot" id="slot1">🍋</div>
+            <div class="slot" id="slot2">🍊</div>
+          </div>
+        `;
+      } else if (currentMode === 'upgrade') {
+        gameArea.innerHTML = `
+          <div class="simple-game">
+            <div class="upgrade-display">
+              <span>10</span>
+              <span class="upgrade-arrow">→</span>
+              <span style="color: var(--gold);">20</span>
+            </div>
+            <div class="multiplier-badge">x2 множитель</div>
+            <div class="mini-message">Нажми Let's Go Gambling</div>
+          </div>
+        `;
+      } else if (currentMode === 'mines') {
+        // сброс состояния мин при переключении
+        minesState.active = false;
+        minesState.revealed = [];
+        minesState.minePositions = [];
+        minesState.currentMultiplier = 1.0;
+        renderMinesGrid();
+      } else if (currentMode === 'cases') {
+        gameArea.innerHTML = `
+          <div class="simple-game">
+            <div class="case-display">📦</div>
+            <div class="multiplier-badge">Случайный приз</div>
+            <div class="mini-message">Нажми Let's Go Gambling</div>
+          </div>
+        `;
+      }
+      // Обновляем кнопку действия в зависимости от режима (мины иногда меняют текст)
+      if (currentMode !== 'mines' || !minesState.active) {
+        actionBtn.textContent = "Let's Go Gambling";
+      }
+    }
+
+    // ---------- Логика для слотов ----------
+    function spinSlots() {
+      if (isSpinning) return;
+      if (balance < currentBet) {
+        showToast('Недостаточно средств');
+        return;
+      }
+      balance -= currentBet;
+      updateBalanceUI();
+      isSpinning = true;
+      actionBtn.disabled = true;
+
+      const symbols = ['🍒', '🍋', '🍊', '🍇', '💎', '7️⃣', '🔔'];
+      const slotEls = [
+        document.getElementById('slot0'),
+        document.getElementById('slot1'),
+        document.getElementById('slot2')
+      ];
+
+      // Анимация
+      let spinCount = 0;
+      const spinInterval = setInterval(() => {
+        slotEls.forEach(el => {
+          el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        });
+        spinCount++;
+        if (spinCount > 12) {
+          clearInterval(spinInterval);
+          // финальный результат
+          const finalSymbols = [];
+          slotEls.forEach((el, i) => {
+            const sym = symbols[Math.floor(Math.random() * symbols.length)];
+            el.textContent = sym;
+            finalSymbols.push(sym);
+          });
+
+          // Определяем выигрыш
+          let win = 0;
+          if (finalSymbols[0] === finalSymbols[1] && finalSymbols[1] === finalSymbols[2]) {
+            // три одинаковых
+            win = currentBet * 10;
+            showToast(`🎉 ДЖЕКПОТ! +${win}`);
+          } else if (finalSymbols[0] === finalSymbols[1] || finalSymbols[1] === finalSymbols[2] || finalSymbols[0] === finalSymbols[2]) {
+            win = currentBet * 2;
+            showToast(`✨ Пара! +${win}`);
+          } else {
+            showToast('Попробуй ещё раз');
+          }
+
+          if (win > 0) {
+            balance += win;
+            updateBalanceUI();
+          }
+          isSpinning = false;
+          actionBtn.disabled = false;
+        }
+      }, 80);
+    }
+
+    // ---------- Апгрейд (имитация) ----------
+    function upgrade() {
+      if (balance < currentBet) {
+        showToast('Недостаточно средств');
+        return;
+      }
+      balance -= currentBet;
+      updateBalanceUI();
+      actionBtn.disabled = true;
+
+      // Анимация: обновляем дисплей
+      const upgradeDisplay = gameArea.querySelector('.upgrade-display');
+      if (upgradeDisplay) {
+        upgradeDisplay.innerHTML = `<span>?</span><span class="upgrade-arrow">→</span><span>?</span>`;
+      }
+
+      setTimeout(() => {
+        const success = Math.random() < 0.45; // 45% шанс
+        if (success) {
+          const win = currentBet * 2;
+          balance += win;
+          updateBalanceUI();
+          showToast(`✅ Апгрейд удался! +${win}`);
+        } else {
+          showToast('❌ Апгрейд не удался');
+        }
+        // Восстановим дисплей
+        if (upgradeDisplay) {
+          upgradeDisplay.innerHTML = `<span>10</span><span class="upgrade-arrow">→</span><span style="color: var(--gold);">20</span>`;
+        }
+        actionBtn.disabled = false;
+      }, 800);
+    }
+
+    // ---------- Мины (упрощённая логика) ----------
+    function renderMinesGrid() {
+      const totalCells = 25; // 5x5
+      const minesCount = minesState.active ? minesState.minesCount : 3;
+      const gridHtml = [];
+      for (let i = 0; i < totalCells; i++) {
+        let cellContent = '';
+        let extraClass = '';
+        if (minesState.revealed.includes(i)) {
+          if (minesState.minePositions.includes(i)) {
+            cellContent = '💣';
+            extraClass = 'mine';
+          } else {
+            cellContent = '💎';
+            extraClass = 'gem';
+          }
+        }
+        gridHtml.push(`<div class="mine-cell ${extraClass}" data-index="${i}">${cellContent}</div>`);
+      }
+      gameArea.innerHTML = `<div class="mines-grid">${gridHtml.join('')}</div>`;
+      if (minesState.active) {
+        // Если игра активна, добавляем обработчики на клики
+        document.querySelectorAll('.mine-cell').forEach(cell => {
+          cell.addEventListener('click', onMineCellClick);
+        });
+      } else {
+        // Если не активна — клики не нужны (или можно начать игру)
+        document.querySelectorAll('.mine-cell').forEach(cell => {
+          cell.addEventListener('click', () => {
+            if (!minesState.active) {
+              showToast('Нажми Let\'s Go Gambling чтобы начать');
+            }
+          });
+        });
+      }
+    }
+
+    function onMineCellClick(e) {
+      if (!minesState.active) return;
+      const index = parseInt(e.currentTarget.dataset.index);
+      if (minesState.revealed.includes(index)) return;
+
+      // Проверяем, мина или нет
+      if (minesState.minePositions.includes(index)) {
+        // Проигрыш
+        minesState.revealed.push(index);
+        minesState.active = false;
+        renderMinesGrid();
+        showToast('💥 Мина! Ты проиграл');
+        actionBtn.textContent = "Let's Go Gambling";
+        // Показываем все мины
+        minesState.minePositions.forEach(pos => {
+          if (!minesState.revealed.includes(pos)) {
+            minesState.revealed.push(pos);
+          }
+        });
+        renderMinesGrid(); // перерисовываем с минами
+        // Меняем обработчики (игра окончена)
+        document.querySelectorAll('.mine-cell').forEach(cell => {
+          cell.removeEventListener('click', onMineCellClick);
+        });
+      } else {
+        // Безопасная ячейка
+        minesState.revealed.push(index);
+        minesState.currentMultiplier = 1 + (minesState.revealed.length * 0.2);
+        renderMinesGrid();
+        // Проверяем победу (все безопасные открыты)
+        const safeTotal = 25 - minesState.minesCount;
+        if (minesState.revealed.length === safeTotal) {
+          // Победа
+          const win = Math.floor(currentBet * minesState.currentMultiplier);
+          balance += win;
+          updateBalanceUI();
+          minesState.active = false;
+          showToast(`🏆 Победа! +${win}`);
+          actionBtn.textContent = "Let's Go Gambling";
+          renderMinesGrid();
+        } else {
+          showToast(`Безопасно! Множитель x${minesState.currentMultiplier.toFixed(1)}`);
+        }
+      }
+    }
+
+    function startMines() {
+      if (balance < currentBet) {
+        showToast('Недостаточно средств');
+        return;
+      }
+      if (minesState.active) return;
+
+      balance -= currentBet;
+      updateBalanceUI();
+
+      // Генерируем позиции мин
+      const total = 25;
+      const minesCount = 3;
+      const positions = new Set();
+      while (positions.size < minesCount) {
+        positions.add(Math.floor(Math.random() * total));
+      }
+      minesState.minePositions = Array.from(positions);
+      minesState.revealed = [];
+      minesState.active = true;
+      minesState.currentMultiplier = 1.0;
+      renderMinesGrid();
+
+      actionBtn.textContent = "Игра идёт...";
+      // обработчики уже добавлены в renderMinesGrid
+    }
+
+    // ---------- Кейсы ----------
+    function openCase() {
+      if (balance < currentBet) {
+        showToast('Недостаточно средств');
+        return;
+      }
+      balance -= currentBet;
+      updateBalanceUI();
+      actionBtn.disabled = true;
+
+      const caseDisplay = gameArea.querySelector('.case-display');
+      if (caseDisplay) {
+        caseDisplay.textContent = '🎁';
+        caseDisplay.style.animation = 'none';
+        caseDisplay.offsetHeight; // reflow
+        caseDisplay.style.animation = 'float 0.5s infinite alternate';
+      }
+
+      setTimeout(() => {
+        const prizes = [
+          { name: 'Ничего', value: 0, emoji: '💨' },
+          { name: 'x0.5', value: Math.floor(currentBet * 0.5), emoji: '🪙' },
+          { name: 'x2', value: currentBet * 2, emoji: '💰' },
+          { name: 'x5', value: currentBet * 5, emoji: '💎' },
+          { name: 'ДЖЕКПОТ x10', value: currentBet * 10, emoji: '👑' }
+        ];
+        const rand = Math.random();
+        let prize;
+        if (rand < 0.4) prize = prizes[0];
+        else if (rand < 0.7) prize = prizes[1];
+        else if (rand < 0.9) prize = prizes[2];
+        else if (rand < 0.98) prize = prizes[3];
+        else prize = prizes[4];
+
+        if (prize.value > 0) {
+          balance += prize.value;
+          updateBalanceUI();
+          showToast(`${prize.emoji} ${prize.name}! +${prize.value}`);
+        } else {
+          showToast(`${prize.emoji} Пусто...`);
+        }
+
+        if (caseDisplay) {
+          caseDisplay.textContent = '📦';
+          caseDisplay.style.animation = 'float 2s infinite alternate';
+        }
+        actionBtn.disabled = false;
+      }, 1000);
+    }
+
+    // ---------- Обработчики ----------
+    function handleAction() {
+      if (currentMode === 'slots') {
+        spinSlots();
+      } else if (currentMode === 'upgrade') {
+        upgrade();
+      } else if (currentMode === 'mines') {
+        if (!minesState.active) {
+          startMines();
+        } else {
+          // Если игра активна, кнопка не должна запускать новую игру, но можно сделать "забрать выигрыш"? 
+          // По заданию не требуется, оставим инфо
+          showToast('Игра в мины уже идёт. Открывай ячейки!');
+        }
+      } else if (currentMode === 'cases') {
+        openCase();
+      }
+    }
+
+    // Переключение режимов
+    modeTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        if (isSpinning) return; // блокируем во время спина
+        // Сброс состояния мин при переключении
+        if (currentMode === 'mines' && minesState.active) {
+          // Возвращаем ставку? Нет, просто сбрасываем (потеря ставки, но это имитация)
+          minesState.active = false;
+          minesState.revealed = [];
+          minesState.minePositions = [];
+        }
+        modeTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentMode = tab.dataset.mode;
+        renderGameArea();
+        // Восстанавливаем кнопку
+        actionBtn.disabled = false;
+        isSpinning = false;
+      });
+    });
+
+    // Кнопки ставки
+    document.getElementById('betMinus').addEventListener('click', () => {
+      setBet(currentBet - 10);
+    });
+    document.getElementById('betPlus').addEventListener('click', () => {
+      setBet(currentBet + 10);
+    });
+
+    // Основная кнопка
+    actionBtn.addEventListener('click', handleAction);
+
+    // Кнопка рулетки (доп. функционал — просто имитация прокрута)
+    rouletteBtn.addEventListener('click', () => {
+      if (isSpinning) return;
+      if (balance < currentBet) {
+        showToast('Недостаточно средств');
+        return;
+      }
+      balance -= currentBet;
+      updateBalanceUI();
+      showToast('🎲 Рулетка крутится...');
+      rouletteBtn.disabled = true;
+      setTimeout(() => {
+        const win = Math.random() < 0.5 ? currentBet * 2 : 0;
+        if (win > 0) {
+          balance += win;
+          updateBalanceUI();
+          showToast(`🎉 Выигрыш ${win}!`);
+        } else {
+          showToast('😢 Не повезло');
+        }
+        rouletteBtn.disabled = false;
+      }, 700);
+    });
+
+    // Инициализация
+    function init() {
+      updateBalanceUI();
+      updateBetUI();
+      renderGameArea();
+    }
+
+    init();
+  })();
+</script>
+</body>
+</html>
