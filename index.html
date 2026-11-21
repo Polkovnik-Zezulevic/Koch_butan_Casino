@@ -381,7 +381,7 @@
     <button class="btn-spin" id="spinBtn">Let's Go Gambling</button>
     
     <div class="bet-selector" id="betSelector">
-      <button class="bet-option active" data-bet="1">$1</button>
+      <button class="bet-option active" data-bet="1">🍈 1</button>
       <button class="bet-option" data-bet="5">🍈 5</button>
       <button class="bet-option" data-bet="10">🍈 10</button>
       <button class="bet-option" data-bet="25">🍈 25</button>
@@ -415,7 +415,7 @@
       'use strict';
       
       const CHANCES = { jackpot: 10, x2: 20 };
-      const SYMBOLS = ['🍒', '🍋', '🍇', '⭐', '💎', '7️⃣', '🔔', '🍀'];
+      const SYMBOLS = ['🍒', '🍋', '🍇', '🍈', '🍑', '🥭', '🍍', '🫐'];
       const JACKPOT_MULT = { 3: 3, 4: 5, 5: 10 };
       const X2_MULT = 2;
       
@@ -573,7 +573,7 @@
       }
       
       function formatMoney(v) {
-        return '$' + (Number.isInteger(v) ? v : v.toFixed(2));
+        return '🍈' + (Number.isInteger(v) ? v : v.toFixed(2));
       }
       
       function updateBalanceUI(animate) {
