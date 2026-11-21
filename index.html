@@ -100,7 +100,6 @@
     
     .btn-plus:active { transform: translateY(3px); box-shadow: 0 0 0 #0f131c; }
     
-    /* Выпадающее меню режимов */
     .mode-menu {
       position: absolute; top: 60px; left: 16px; background: #1e2534; 
       border: 1px solid #3b4659; border-radius: 16px; padding: 8px;
@@ -133,7 +132,6 @@
       font-weight: 800;
     }
     
-    /* Контейнер для слотов и мин */
     .game-area {
       display: flex; justify-content: center; align-items: center; gap: clamp(6px, 2vw, 12px);
       margin: 18px 0 14px; perspective: 900px; min-height: clamp(76px, 23vw, 132px);
@@ -195,7 +193,6 @@
       100% { transform: scale(1) rotate(0deg); }
     }
     
-    /* Поле для мин 4x4 */
     .mines-container {
       display: none; grid-template-columns: repeat(4, 1fr); gap: clamp(4px, 1.5vw, 10px);
       width: 100%; max-width: 400px;
@@ -466,9 +463,9 @@
       const X2_MULT = 2;
       
       const MINES_MULT = {
-        3: 1.5,
-        4: 2,
-        5: 2.5
+        3: 3,
+        4: 5,
+        5: 10
       };
       
       let balance = 100;
@@ -676,7 +673,7 @@
           modeButtons.forEach(btn => {
             btn.textContent = btn.dataset.mines + ' мин';
           });
-          footerHint.innerHTML = '<b>3 мины:</b> каждая безопасная клетка - ×1.5<br><b>4 мины:</b> каждая безопасная клетка - ×2<br><b>5 мин:</b> каждая безопасная клетка - ×2.5';
+          footerHint.innerHTML = '<b>3 мины:</b> каждая безопасная клетка - ×3<br><b>4 мины:</b> каждая безопасная клетка - ×5<br><b>5 мин:</b> каждая безопасная клетка - ×10';
           createMinesField();
           spinBtn.textContent = "Начать игру";
           setMessage('Выбери ставку и нажми Начать игру');
