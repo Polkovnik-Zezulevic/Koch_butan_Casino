@@ -55,6 +55,15 @@
     
     .header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
     
+    .logo-area { display: flex; align-items: center; gap: 10px; }
+    
+    .menu-btn {
+      background: none; border: none; font-size: 1.8rem; color: #f5d742;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      padding: 4px; border-radius: 8px; transition: transform 0.1s;
+    }
+    .menu-btn:active { transform: scale(0.9); }
+    
     .logo {
       font-weight: 900; font-size: clamp(1.15rem, 4vw, 1.55rem); letter-spacing: 1.5px;
       background: linear-gradient(135deg, #fff2a8, #f5d742, #e6b422, #fff2a8);
@@ -91,6 +100,22 @@
     
     .btn-plus:active { transform: translateY(3px); box-shadow: 0 0 0 #0f131c; }
     
+    /* Выпадающее меню режимов */
+    .mode-menu {
+      position: absolute; top: 60px; left: 16px; background: #1e2534; 
+      border: 1px solid #3b4659; border-radius: 16px; padding: 8px;
+      display: flex; flex-direction: column; gap: 4px; z-index: 100;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8); transform-origin: top left;
+      opacity: 0; pointer-events: none; transform: scale(0.9); transition: all 0.2s;
+    }
+    .mode-menu.show { opacity: 1; pointer-events: auto; transform: scale(1); }
+    .mode-menu button {
+      background: transparent; border: none; color: #b9c5d6; font-weight: 700;
+      font-size: 1rem; padding: 10px 20px; text-align: left; border-radius: 10px;
+      cursor: pointer; transition: background 0.1s;
+    }
+    .mode-menu button:hover, .mode-menu button.active { background: #2e3a4e; color: #f5d742; }
+    
     .mode-selector {
       display: flex; gap: 6px; margin-bottom: 16px; background: #121722; padding: 6px;
       border-radius: 60px; border: 1px solid #2e3748; box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);
@@ -108,22 +133,21 @@
       font-weight: 800;
     }
     
-    .slots-container {
+    /* Контейнер для слотов и мин */
+    .game-area {
       display: flex; justify-content: center; align-items: center; gap: clamp(6px, 2vw, 12px);
       margin: 18px 0 14px; perspective: 900px; min-height: clamp(76px, 23vw, 132px);
     }
     
+    .slots-container { display: flex; gap: clamp(6px, 2vw, 12px); }
+    
     .slot {
       width: clamp(52px, 16vw, 96px); height: clamp(74px, 22.5vw, 132px);
-      background:
-        radial-gradient(circle at 50% 15%, rgba(255, 255, 255, 0.10), transparent 60%),
-        linear-gradient(160deg, #232b3c, #0e1219);
+      background: radial-gradient(circle at 50% 15%, rgba(255, 255, 255, 0.10), transparent 60%), linear-gradient(160deg, #232b3c, #0e1219);
       border-radius: clamp(10px, 3vw, 18px);
       display: flex; align-items: center; justify-content: center;
       font-size: clamp(2rem, 9vw, 4rem); font-weight: 700;
-      box-shadow:
-        0 8px 0 #06080c, 0 0 0 2px #2a3446,
-        inset 0 3px 10px rgba(0, 0, 0, 0.55), inset 0 -3px 10px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 8px 0 #06080c, 0 0 0 2px #2a3446, inset 0 3px 10px rgba(0, 0, 0, 0.55), inset 0 -3px 10px rgba(0, 0, 0, 0.4);
       border: 1px solid #4e5a70; text-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
       will-change: transform; transition: box-shadow 0.2s; position: relative; overflow: hidden;
     }
@@ -146,10 +170,7 @@
     
     .slot.win {
       animation: winPulse 1.2s ease-out;
-      box-shadow:
-        0 8px 0 #06080c, 0 0 0 2px #6fcf97,
-        inset 0 3px 10px rgba(0,0,0,0.5),
-        0 0 32px rgba(111, 207, 151, 0.9), 0 0 60px rgba(111, 207, 151, 0.5);
+      box-shadow: 0 8px 0 #06080c, 0 0 0 2px #6fcf97, inset 0 3px 10px rgba(0,0,0,0.5), 0 0 32px rgba(111, 207, 151, 0.9), 0 0 60px rgba(111, 207, 151, 0.5);
     }
     
     @keyframes winPulse {
@@ -162,10 +183,7 @@
     
     .slot.jackpot-win {
       animation: jackpotPulse 1.6s ease-out;
-      box-shadow:
-        0 8px 0 #06080c, 0 0 0 3px #f5d742,
-        inset 0 3px 10px rgba(0,0,0,0.5),
-        0 0 45px rgba(245, 215, 66, 1), 0 0 90px rgba(255, 160, 0, 0.7);
+      box-shadow: 0 8px 0 #06080c, 0 0 0 3px #f5d742, inset 0 3px 10px rgba(0,0,0,0.5), 0 0 45px rgba(245, 215, 66, 1), 0 0 90px rgba(255, 160, 0, 0.7);
     }
     
     @keyframes jackpotPulse {
@@ -177,15 +195,33 @@
       100% { transform: scale(1) rotate(0deg); }
     }
     
+    /* Поле для мин 4x4 */
+    .mines-container {
+      display: none; grid-template-columns: repeat(4, 1fr); gap: clamp(4px, 1.5vw, 10px);
+      width: 100%; max-width: 400px;
+    }
+    .mine-cell {
+      aspect-ratio: 1;
+      background: radial-gradient(circle at 50% 15%, rgba(255, 255, 255, 0.10), transparent 60%), linear-gradient(160deg, #232b3c, #0e1219);
+      border-radius: clamp(8px, 2vw, 14px);
+      display: flex; align-items: center; justify-content: center;
+      font-size: clamp(1.2rem, 5vw, 2rem); font-weight: 700;
+      box-shadow: 0 6px 0 #06080c, 0 0 0 2px #2a3446, inset 0 3px 10px rgba(0, 0, 0, 0.55);
+      border: 1px solid #4e5a70; cursor: pointer; transition: all 0.2s;
+    }
+    .mine-cell:active { transform: scale(0.95); }
+    .mine-cell.opened { background: #161b26; box-shadow: inset 0 3px 10px rgba(0,0,0,0.8); cursor: default; border-color: #2a3446; }
+    .mine-cell.opened.safe { color: #6fcf97; }
+    .mine-cell.opened.bomb { color: #eb5757; background: rgba(235, 87, 87, 0.1); border-color: #eb5757;}
+    .mine-cell.opened.bomb::after { content: '💥'; }
+    
     .btn-spin {
       position: relative; overflow: hidden; width: 100%; padding: 20px 12px;
       background: linear-gradient(135deg, #ffe066 0%, #f5d742 40%, #d4a017 100%);
       border: 1px solid #ffe066; border-radius: 60px;
       font-weight: 900; font-size: clamp(1.15rem, 4.8vw, 1.75rem); letter-spacing: 2.5px;
       color: #131824; text-shadow: 0 2px 0 rgba(255, 255, 255, 0.4); cursor: pointer;
-      box-shadow:
-        0 8px 0 #7a5c0a, 0 14px 26px rgba(0, 0, 0, 0.5),
-        inset 0 1px 0 rgba(255,255,255,0.6);
+      box-shadow: 0 8px 0 #7a5c0a, 0 14px 26px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.6);
       transition: transform 0.08s, box-shadow 0.08s; margin: 8px 0 18px;
       text-transform: uppercase; -webkit-text-stroke: 0.3px #b8860b;
     }
@@ -347,7 +383,6 @@
       .btn-plus { width: 30px; height: 30px; font-size: 1.4rem; }
       .slot { width: 46px; height: 66px; border-radius: 10px; }
       .bet-option { padding: 8px 10px; min-width: 58px; }
-      .slots-container { gap: 5px; }
     }
     
     @media (min-width: 700px) {
@@ -361,20 +396,31 @@
 <body>
   <div class="casino" id="casinoEl">
     <div class="header">
-      <div class="logo">🎰 КОЧ БУТАН</div>
+      <div class="logo-area">
+        <button class="menu-btn" id="menuBtn">☰</button>
+        <div class="logo">КОЧ БУТАН</div>
+      </div>
       <div class="balance-box">
         <span class="balance-amount" id="balanceDisplay">🍈 100</span>
         <button class="btn-plus" id="openDepositBtn" aria-label="Пополнить">+</button>
       </div>
     </div>
-    
-    <div class="mode-selector">
-      <button class="mode-btn active" data-slots="3">3 клетки</button>
-      <button class="mode-btn" data-slots="4">4 клетки</button>
-      <button class="mode-btn" data-slots="5">5 клеток</button>
+
+    <div class="mode-menu" id="modeMenu">
+      <button class="menu-item active" data-game="slots">🎰 Классика</button>
+      <button class="menu-item" data-game="mines">💣 Мины</button>
     </div>
     
-    <div class="slots-container" id="slotsContainer"></div>
+    <div class="mode-selector" id="topSelector">
+      <button class="mode-btn active" data-slots="3" data-mines="3">3 клетки</button>
+      <button class="mode-btn" data-slots="4" data-mines="4">4 клетки</button>
+      <button class="mode-btn" data-slots="5" data-mines="5">5 клеток</button>
+    </div>
+    
+    <div class="game-area" id="gameArea">
+      <div class="slots-container" id="slotsContainer"></div>
+      <div class="mines-container" id="minesContainer"></div>
+    </div>
     
     <div class="message" id="message">Выбери ставку и нажми Let's Go Gambling</div>
     
@@ -387,7 +433,7 @@
       <button class="bet-option" data-bet="25">🍈 25</button>
     </div>
 
-    <div class="footer-hint">
+    <div class="footer-hint" id="footerHint">
       <b>3 слота:</b> 2 совпадения - ×2 • 3 совпадения - ДЖЕКПОТ ×3<br>
       <b>4 слота:</b> 3 совпадения - ×2 • 4 совпадения - ДЖЕКПОТ ×5<br>
       <b>5 слота:</b> 4 совпадения - ×2 • 5 совпадений - ДЖЕКПОТ ×10
@@ -415,9 +461,15 @@
       'use strict';
       
       const CHANCES = { jackpot: 10, x2: 20 };
-      const SYMBOLS = ['🍒', '🍋', '🍇', '🍈', '🍑', '🥭', '🍍', '🫐'];
+      const SYMBOLS = ['🫐', '🍒', '🍇', '🍎', '🍑', '🥭', '🥥', '🍍'];
       const JACKPOT_MULT = { 3: 3, 4: 5, 5: 10 };
       const X2_MULT = 2;
+      
+      const MINES_MULT = {
+        3: 1.5,
+        4: 2,
+        5: 2.5
+      };
       
       let balance = 100;
       let currentSlots = 3;
@@ -425,12 +477,26 @@
       let isSpinning = false;
       let spinTimeout = null;
       
+      let currentGame = 'slots';
+      
+      let minesActive = false;
+      let minesData = [];
+      let minesOpened = 0;
+      let minesCurrentWin = 0;
+      
+      const menuBtn = document.getElementById('menuBtn');
+      const modeMenu = document.getElementById('modeMenu');
+      const menuItems = document.querySelectorAll('.menu-item');
+      
       const balanceDisplay = document.getElementById('balanceDisplay');
       const slotsContainer = document.getElementById('slotsContainer');
+      const minesContainer = document.getElementById('minesContainer');
       const spinBtn = document.getElementById('spinBtn');
       const messageEl = document.getElementById('message');
+      const footerHint = document.getElementById('footerHint');
       const betButtons = document.querySelectorAll('.bet-option');
       const modeButtons = document.querySelectorAll('.mode-btn');
+      
       const openDepositBtn = document.getElementById('openDepositBtn');
       const depositModal = document.getElementById('depositModal');
       const depositInput = document.getElementById('depositInput');
@@ -463,17 +529,14 @@
           const angle = Math.random() * Math.PI * 2;
           const speed = (3 + Math.random() * 11) * spread;
           particles.push({
-            x: x,
-            y: y,
+            x: x, y: y,
             vx: Math.cos(angle) * speed,
             vy: Math.sin(angle) * speed - 3,
             size: 4 + Math.random() * 9,
             color: colors[Math.floor(Math.random() * colors.length)],
             rotation: Math.random() * Math.PI * 2,
             rotationSpeed: (Math.random() - 0.5) * 0.35,
-            life: 1,
-            decay: 0.007 + Math.random() * 0.012,
-            gravity: 0.32,
+            life: 1, decay: 0.007 + Math.random() * 0.012, gravity: 0.32,
             shape: Math.random() > 0.5 ? 'rect' : 'circle'
           });
         }
@@ -539,10 +602,10 @@
         setTimeout(() => el.remove(), 950);
       }
       
-      function showJackpotText() {
+      function showJackpotText(textStr) {
         const el = document.createElement('div');
         el.className = 'jackpot-text';
-        el.textContent = 'JACKPOT!';
+        el.textContent = textStr;
         document.body.appendChild(el);
         setTimeout(() => el.remove(), 2300);
       }
@@ -563,8 +626,8 @@
         setTimeout(() => r.remove(), 1400);
       }
       
-      function getSlotsCenter() {
-        const rect = slotsContainer.getBoundingClientRect();
+      function getAreaCenter() {
+        const rect = document.getElementById('gameArea').getBoundingClientRect();
         return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
       }
       
@@ -590,6 +653,52 @@
         messageEl.className = 'message' + (type ? ' ' + type : '');
       }
       
+      function switchGame(game) {
+        if (isSpinning || minesActive) return;
+        currentGame = game;
+        
+        menuItems.forEach(item => item.classList.toggle('active', item.dataset.game === game));
+        modeMenu.classList.remove('show');
+        
+        if (game === 'slots') {
+          slotsContainer.style.display = 'flex';
+          minesContainer.style.display = 'none';
+          modeButtons.forEach(btn => {
+            btn.textContent = btn.dataset.slots + ' клетки';
+          });
+          footerHint.innerHTML = '<b>3 слота:</b> 2 совпадения - ×2 • 3 совпадения - ДЖЕКПОТ ×3<br><b>4 слота:</b> 3 совпадения - ×2 • 4 совпадения - ДЖЕКПОТ ×5<br><b>5 слота:</b> 4 совпадения - ×2 • 5 совпадений - ДЖЕКПОТ ×10';
+          spinBtn.textContent = "Let's Go Gambling";
+          createSlots(currentSlots);
+          setMessage('Выбери ставку и нажми Let\'s Go Gambling');
+        } else {
+          slotsContainer.style.display = 'none';
+          minesContainer.style.display = 'grid';
+          modeButtons.forEach(btn => {
+            btn.textContent = btn.dataset.mines + ' мин';
+          });
+          footerHint.innerHTML = '<b>3 мины:</b> каждая безопасная клетка - ×1.5<br><b>4 мины:</b> каждая безопасная клетка - ×2<br><b>5 мин:</b> каждая безопасная клетка - ×2.5';
+          createMinesField();
+          spinBtn.textContent = "Начать игру";
+          setMessage('Выбери ставку и нажми Начать игру');
+        }
+      }
+      
+      menuBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        modeMenu.classList.toggle('show');
+      });
+      
+      document.addEventListener('click', (e) => {
+        if (!modeMenu.contains(e.target) && e.target !== menuBtn) {
+          modeMenu.classList.remove('show');
+        }
+      });
+      
+      menuItems.forEach(item => {
+        item.addEventListener('click', () => switchGame(item.dataset.game));
+      });
+      
+      // ================= СЛОТЫ =================
       function createSlots(count) {
         slotsContainer.innerHTML = '';
         for (let i = 0; i < count; i++) {
@@ -601,23 +710,187 @@
         }
       }
       
-      function setMode(count) {
-        if (isSpinning) return;
+      function setSlotsMode(count) {
+        if (isSpinning || minesActive) return;
         currentSlots = count;
         modeButtons.forEach(btn => btn.classList.toggle('active', Number(btn.dataset.slots) === count));
         createSlots(count);
         setMessage('Режим: ' + count + ' клетки');
       }
       
+      // ================= МИНЫ (4x4) =================
+      function createMinesField() {
+        minesContainer.innerHTML = '';
+        minesData = [];
+        minesOpened = 0;
+        minesCurrentWin = 0;
+        
+        for (let i = 0; i < 16; i++) {
+          const cell = document.createElement('div');
+          cell.className = 'mine-cell';
+          cell.dataset.index = i;
+          cell.addEventListener('click', () => handleMineClick(i, cell));
+          minesContainer.appendChild(cell);
+          minesData.push({ isBomb: false, opened: false });
+        }
+      }
+      
+      function setMinesMode(count) {
+        if (isSpinning || minesActive) return;
+        currentSlots = count;
+        modeButtons.forEach(btn => btn.classList.toggle('active', Number(btn.dataset.mines) === count));
+        createMinesField();
+        setMessage('Выбрано: ' + count + ' мин');
+      }
+      
       modeButtons.forEach(btn => {
         btn.addEventListener('click', () => {
-          if (!isSpinning) setMode(Number(btn.dataset.slots));
+          if (isSpinning || minesActive) return;
+          if (currentGame === 'slots') setSlotsMode(Number(btn.dataset.slots));
+          else setMinesMode(Number(btn.dataset.mines));
         });
       });
       
+      function handleMineClick(index, cell) {
+        if (!minesActive || minesData[index].opened) return;
+        
+        minesData[index].opened = true;
+        cell.classList.add('opened');
+        
+        if (minesData[index].isBomb) {
+          cell.classList.add('bomb');
+          minesActive = false;
+          spinBtn.disabled = false;
+          spinBtn.textContent = "Начать игру";
+          setMessage('💥 БУМ! Вы наткнулись на мину. Ставка ' + formatMoney(currentBet) + ' потеряна.', 'lose');
+          shakeCasino();
+          
+          setTimeout(() => {
+            document.querySelectorAll('.mine-cell').forEach((c, i) => {
+              if (minesData[i].isBomb && !minesData[i].opened) {
+                c.classList.add('opened', 'bomb');
+              }
+            });
+          }, 300);
+        } else {
+          cell.classList.add('safe');
+          cell.textContent = '💎';
+          minesOpened++;
+          
+          const mult = MINES_MULT[currentSlots];
+          const totalSafe = 16 - currentSlots;
+          
+          minesCurrentWin = currentBet * Math.pow(mult, minesOpened);
+          
+          if (minesOpened >= totalSafe) {
+            balance += minesCurrentWin;
+            updateBalanceUI(true);
+            minesActive = false;
+            spinBtn.disabled = false;
+            spinBtn.textContent = "Начать игру";
+            
+            setMessage('🏆 ПОБЕДА! Все безопасные клетки открыты. Выигрыш ' + formatMoney(minesCurrentWin) + ' (×' + Math.pow(mult, minesOpened).toFixed(1) + ')', 'jackpot');
+            
+            const center = getAreaCenter();
+            screenFlash();
+            showJackpotText('WIN!');
+            shakeCasino();
+            createRipple(center.x, center.y);
+            spawnConfetti(center.x, center.y, 90, { colors: GOLD_COLORS, spread: 1.3 });
+            startConfettiRain(2600, GOLD_COLORS);
+          } else {
+            setMessage('Безопасно! Текущий выигрыш: ' + formatMoney(minesCurrentWin) + ' (×' + Math.pow(mult, minesOpened).toFixed(1) + ')', 'win');
+            spinBtn.textContent = "Забрать " + formatMoney(minesCurrentWin);
+          }
+        }
+      }
+      
+      function startMines() {
+        if (balance < currentBet) {
+          setMessage('❌ Недостаточно средств! Пополни баланс.', 'lose');
+          return;
+        }
+        
+        balance -= currentBet;
+        updateBalanceUI(false);
+        
+        minesActive = true;
+        
+        const bombIndices = new Set();
+        while (bombIndices.size < currentSlots) {
+          bombIndices.add(Math.floor(Math.random() * 16));
+        }
+        
+        minesData.forEach((data, i) => {
+          data.isBomb = bombIndices.has(i);
+          data.opened = false;
+        });
+        
+        const cells = minesContainer.querySelectorAll('.mine-cell');
+        cells.forEach((c, i) => {
+          c.className = 'mine-cell';
+          c.textContent = '';
+        });
+        
+        minesOpened = 0;
+        minesCurrentWin = 0;
+        setMessage('Игра началась! Выбирай безопасные клетки.', 'win');
+        spinBtn.textContent = "Забрать 0";
+      }
+      
+      function cashOutMines() {
+        if (!minesActive) return;
+        
+        if (minesOpened === 0) {
+          minesActive = false;
+          spinBtn.textContent = "Начать игру";
+          setMessage('Вы не открыли ни одной клетки. Игра отменена.', 'lose');
+          
+          setTimeout(() => {
+            document.querySelectorAll('.mine-cell').forEach((c, i) => {
+              if (minesData[i].isBomb) c.classList.add('opened', 'bomb');
+            });
+          }, 300);
+          return;
+        }
+        
+        balance += minesCurrentWin;
+        updateBalanceUI(true);
+        
+        minesActive = false;
+        spinBtn.disabled = false;
+        spinBtn.textContent = "Начать игру";
+        
+        setMessage('Вы забрали ' + formatMoney(minesCurrentWin) + '!', 'win');
+        
+        const center = getAreaCenter();
+        spawnConfetti(center.x, center.y, 35, { colors: ['#6fcf97', '#4dabf7', '#f5d742', '#da77f2', '#ffa94d'] });
+        
+        setTimeout(() => {
+          document.querySelectorAll('.mine-cell').forEach((c, i) => {
+            if (minesData[i].isBomb && !minesData[i].opened) {
+              c.classList.add('opened', 'bomb');
+            }
+          });
+        }, 300);
+      }
+      
+      spinBtn.addEventListener('click', () => {
+        if (currentGame === 'slots') {
+          playSpin();
+        } else {
+          if (!minesActive) {
+            startMines();
+          } else {
+            cashOutMines();
+          }
+        }
+      });
+      
+      // ================= СТАВКИ И ПОПОЛНЕНИЕ =================
       betButtons.forEach(btn => {
         btn.addEventListener('click', () => {
-          if (isSpinning) return;
+          if (isSpinning || minesActive) return;
           currentBet = Number(btn.dataset.bet);
           betButtons.forEach(b => b.classList.toggle('active', b === btn));
           setMessage('Ставка: ' + formatMoney(currentBet));
@@ -625,7 +898,7 @@
       });
       
       function openDeposit() {
-        if (isSpinning) return;
+        if (isSpinning || minesActive) return;
         depositModal.classList.add('show');
         depositInput.value = '';
         modalError.textContent = '';
@@ -656,7 +929,7 @@
         }
         
         if (amount > 100) {
-          modalError.textContent = 'Неверная сумма! Максимум $100';
+          modalError.textContent = 'Неверная сумма! Максимум 🍈100';
           modalError.classList.add('show');
           return;
         }
@@ -679,6 +952,7 @@
         }
       });
       
+      // ================= ИГРА В СЛОТЫ =================
       function rollOutcome() {
         const r = Math.random() * 100;
         if (r < CHANCES.jackpot) return 'jackpot';
@@ -779,7 +1053,7 @@
         spinTimeout = setTimeout(() => {
           isSpinning = false;
           spinBtn.disabled = false;
-          const center = getSlotsCenter();
+          const center = getAreaCenter();
           
           if (outcome === 'jackpot') {
             const winAmount = currentBet * JACKPOT_MULT[slotCount];
@@ -788,7 +1062,7 @@
             setMessage('Oh my God, I won! JACKPOT! ' + finalSymbols[0] + ' × ' + slotCount + ' — выигрыш ' + formatMoney(winAmount) + ' (×' + JACKPOT_MULT[slotCount] + ')', 'jackpot');
             shakeCasino();
             screenFlash();
-            showJackpotText();
+            showJackpotText('JACKPOT!');
             slots.forEach((s, i) => {
               s.style.animationDelay = (i * 0.09) + 's';
               s.classList.add('jackpot-win');
@@ -830,8 +1104,7 @@
         }, maxStop + 150);
       }
       
-      spinBtn.addEventListener('click', playSpin);
-      
+      // ================= ИНИЦИАЛИЗАЦИЯ =================
       function init() {
         updateBalanceUI(false);
         createSlots(3);
