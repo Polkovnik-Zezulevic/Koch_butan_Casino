@@ -54,7 +54,6 @@
     }
     
     .header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
-    
     .logo-area { display: flex; align-items: center; gap: 10px; }
     
     .menu-btn {
@@ -212,6 +211,72 @@
     .mine-cell.opened.bomb { color: #eb5757; background: rgba(235, 87, 87, 0.1); border-color: #eb5757;}
     .mine-cell.opened.bomb::after { content: '💥'; }
     
+    /* ---------- АПГРЕЙД ---------- */
+    .upgrade-container {
+      display: none; flex-direction: column; align-items: center; width: 100%; gap: 16px;
+    }
+    .upgrade-bets {
+      display: flex; gap: 10px; justify-content: center; width: 100%;
+    }
+    .upg-bet-btn {
+      background: linear-gradient(160deg, #202838, #171d28); border: 2px solid #3b4659;
+      color: #b9c5d6; padding: 10px 14px; border-radius: 20px; font-weight: 800;
+      cursor: pointer; transition: all 0.18s; flex: 1; max-width: 100px; text-align: center;
+    }
+    .upg-bet-btn.active {
+      border-color: #f5d742; color: #f5d742; box-shadow: 0 0 14px rgba(245, 215, 66, 0.35);
+    }
+    .upg-bet-btn .upg-mult { font-size: 1.2rem; display: block; margin-bottom: 2px;}
+    .upg-bet-btn .upg-chance { font-size: 0.7rem; opacity: 0.8; display: block; font-weight: 400;}
+
+    /* Клетки апгрейда: квадратные, отодвинуты от круга */
+    .wheel-area {
+      display: flex; align-items: center; justify-content: center; width: 100%; padding: 10px 0;
+      gap: clamp(15px, 5vw, 30px); /* Увеличенный отступ */
+    }
+    
+    .wheel-platform {
+      background: radial-gradient(circle at 50% 15%, rgba(255, 255, 255, 0.10), transparent 60%), linear-gradient(160deg, #232b3c, #0e1219);
+      border: 2px solid #3b4659; border-radius: clamp(8px, 2vw, 14px);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      flex: 1; 
+      max-width: clamp(65px, 22vw, 100px); /* Увеличенный размер, как в минах */
+      aspect-ratio: 1; 
+      box-shadow: 0 6px 0 #06080c, 0 0 0 2px #2a3446, inset 0 3px 10px rgba(0, 0, 0, 0.55);
+    }
+    .wheel-platform .label { font-size: clamp(0.55rem, 2.5vw, 0.75rem); color: #6b7a8f; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
+    .wheel-platform .value { font-size: clamp(0.9rem, 4vw, 1.2rem); font-weight: 900; color: #f5d742; text-shadow: 0 0 10px rgba(245,215,66,0.4); }
+    .wheel-platform.win .value { color: #6fcf97; text-shadow: 0 0 10px rgba(111,207,151,0.4); }
+    
+    .wheel-wrapper {
+      position: relative; flex-shrink: 0; width: clamp(150px, 40vw, 200px); height: clamp(150px, 40vw, 200px);
+      display: flex; justify-content: center; align-items: center;
+    }
+    
+    .wheel-svg { width: 100%; height: 100%; transform: rotate(-90deg); overflow: visible; }
+    
+    .wheel-chance-arc {
+      transform-origin: 50px 50px;
+      transition: stroke-dasharray 0.5s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.5s, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .wheel-pointer-container {
+      position: absolute; inset: 0; pointer-events: none;
+      transform-origin: center center;
+    }
+    
+    .wheel-pointer {
+      position: absolute; top: -4px; left: 50%; transform: translateX(-50%);
+      width: 0; height: 0;
+      border-left: 9px solid transparent; border-right: 9px solid transparent;
+      border-top: 20px solid #fff;
+      filter: drop-shadow(0 0 6px rgba(255,255,255,0.9));
+    }
+
+    @media (max-width: 380px) {
+      .wheel-pointer { border-left-width: 7px; border-right-width: 7px; border-top-width: 16px; top: -2px; }
+    }
+
     .btn-spin {
       position: relative; overflow: hidden; width: 100%; padding: 20px 12px;
       background: linear-gradient(135deg, #ffe066 0%, #f5d742 40%, #d4a017 100%);
@@ -406,6 +471,7 @@
     <div class="mode-menu" id="modeMenu">
       <button class="menu-item active" data-game="slots">🎰 Классика</button>
       <button class="menu-item" data-game="mines">💣 Мины</button>
+      <button class="menu-item" data-game="upgrade">📈 Апгрейд</button>
     </div>
     
     <div class="mode-selector" id="topSelector">
@@ -417,6 +483,7 @@
     <div class="game-area" id="gameArea">
       <div class="slots-container" id="slotsContainer"></div>
       <div class="mines-container" id="minesContainer"></div>
+      <div class="upgrade-container" id="upgradeContainer"></div>
     </div>
     
     <div class="message" id="message">Выбери ставку и нажми Let's Go Gambling</div>
@@ -462,11 +529,7 @@
       const JACKPOT_MULT = { 3: 3, 4: 5, 5: 10 };
       const X2_MULT = 2;
       
-      const MINES_MULT = {
-        3: 3,
-        4: 5,
-        5: 10
-      };
+      const MINES_MULT = { 3: 3, 4: 5, 5: 10 };
       
       let balance = 100;
       let currentSlots = 3;
@@ -481,6 +544,9 @@
       let minesOpened = 0;
       let minesCurrentWin = 0;
       
+      let upgradeMult = 3;
+      let upgradeRotation = 0;
+      
       const menuBtn = document.getElementById('menuBtn');
       const modeMenu = document.getElementById('modeMenu');
       const menuItems = document.querySelectorAll('.menu-item');
@@ -488,6 +554,7 @@
       const balanceDisplay = document.getElementById('balanceDisplay');
       const slotsContainer = document.getElementById('slotsContainer');
       const minesContainer = document.getElementById('minesContainer');
+      const upgradeContainer = document.getElementById('upgradeContainer');
       const spinBtn = document.getElementById('spinBtn');
       const messageEl = document.getElementById('message');
       const footerHint = document.getElementById('footerHint');
@@ -657,9 +724,14 @@
         menuItems.forEach(item => item.classList.toggle('active', item.dataset.game === game));
         modeMenu.classList.remove('show');
         
+        slotsContainer.style.display = 'none';
+        minesContainer.style.display = 'none';
+        upgradeContainer.style.display = 'none';
+        document.getElementById('topSelector').style.display = 'none';
+        
         if (game === 'slots') {
           slotsContainer.style.display = 'flex';
-          minesContainer.style.display = 'none';
+          document.getElementById('topSelector').style.display = 'flex';
           modeButtons.forEach(btn => {
             btn.textContent = btn.dataset.slots + ' клетки';
           });
@@ -667,9 +739,9 @@
           spinBtn.textContent = "Let's Go Gambling";
           createSlots(currentSlots);
           setMessage('Выбери ставку и нажми Let\'s Go Gambling');
-        } else {
-          slotsContainer.style.display = 'none';
+        } else if (game === 'mines') {
           minesContainer.style.display = 'grid';
+          document.getElementById('topSelector').style.display = 'flex';
           modeButtons.forEach(btn => {
             btn.textContent = btn.dataset.mines + ' мин';
           });
@@ -677,6 +749,12 @@
           createMinesField();
           spinBtn.textContent = "Начать игру";
           setMessage('Выбери ставку и нажми Начать игру');
+        } else if (game === 'upgrade') {
+          upgradeContainer.style.display = 'flex';
+          footerHint.innerHTML = '<b>Апгрейд:</b> Выбери множитель и крути рулетку. Шанс выпадения равен 1 к множителю.<br>Если не повезло — ставка сгорает.';
+          createUpgradeWheel();
+          spinBtn.textContent = "Крутить";
+          setMessage('Выбери ставку и нажми Крутить');
         }
       }
       
@@ -744,7 +822,7 @@
         btn.addEventListener('click', () => {
           if (isSpinning || minesActive) return;
           if (currentGame === 'slots') setSlotsMode(Number(btn.dataset.slots));
-          else setMinesMode(Number(btn.dataset.mines));
+          else if (currentGame === 'mines') setMinesMode(Number(btn.dataset.mines));
         });
       });
       
@@ -777,7 +855,6 @@
           const mult = MINES_MULT[currentSlots];
           const totalSafe = 16 - currentSlots;
           
-          // Линейное прибавление: начальная ставка * множитель
           minesCurrentWin += currentBet * mult;
           
           if (minesOpened >= totalSafe) {
@@ -873,15 +950,197 @@
         }, 300);
       }
       
+      // ================= АПГРЕЙД =================
+      function createUpgradeWheel() {
+        const CIRC = 282.74;
+        
+        upgradeContainer.innerHTML = `
+          <div class="upgrade-bets" id="upgBets">
+            <button class="upg-bet-btn active" data-mult="3">
+              <span class="upg-mult">×3</span>
+              <span class="upg-chance">Шанс 30%</span>
+            </button>
+            <button class="upg-bet-btn" data-mult="5">
+              <span class="upg-mult">×5</span>
+              <span class="upg-chance">Шанс 20%</span>
+            </button>
+            <button class="upg-bet-btn" data-mult="10">
+              <span class="upg-mult">×10</span>
+              <span class="upg-chance">Шанс 10%</span>
+            </button>
+          </div>
+          
+          <div class="wheel-area">
+            <div class="wheel-platform">
+              <div class="label">Ставка</div>
+              <div class="value" id="upgBetDisplay">🍈1</div>
+            </div>
+            
+            <div class="wheel-wrapper">
+              <svg class="wheel-svg" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="45" fill="none" stroke="#2a3446" stroke-width="10" />
+                <circle id="winArc" cx="50" cy="50" r="45" fill="none" stroke="#6fcf97" stroke-width="10" 
+                        stroke-dasharray="0 ${CIRC}" class="wheel-chance-arc" />
+              </svg>
+              <div class="wheel-pointer-container" id="wheelPointerContainer">
+                <div class="wheel-pointer"></div>
+              </div>
+            </div>
+
+            <div class="wheel-platform win">
+              <div class="label">Выигрыш</div>
+              <div class="value" id="upgWinDisplay">🍈3</div>
+            </div>
+          </div>
+        `;
+        
+        updateUpgradeLabels();
+        
+        const upgBets = upgradeContainer.querySelectorAll('.upg-bet-btn');
+        upgBets.forEach(btn => {
+          btn.addEventListener('click', () => {
+            if (isSpinning) return;
+            upgradeMult = Number(btn.dataset.mult);
+            upgBets.forEach(b => b.classList.toggle('active', b === btn));
+            setMessage('Выбран множитель: ×' + upgradeMult);
+            updateUpgradeLabels();
+          });
+        });
+      }
+
+      // Новые шансы в зависимости от множителя
+      function getWinChancePercentage(mult) {
+        if (mult === 3) return 0.3; // 30%
+        if (mult === 5) return 0.2; // 20%
+        if (mult === 10) return 0.1; // 10%
+        return 0.1;
+      }
+
+      function updateUpgradeLabels() {
+        if (currentGame !== 'upgrade') return;
+        const CIRC = 282.74;
+        
+        document.getElementById('upgBetDisplay').textContent = formatMoney(currentBet);
+        document.getElementById('upgWinDisplay').textContent = formatMoney(currentBet * upgradeMult);
+        
+        const arc = document.getElementById('winArc');
+        if (arc) {
+          const chance = getWinChancePercentage(upgradeMult);
+          const dashLength = CIRC * chance;
+          const angleDeg = 360 * chance;
+          
+          arc.style.strokeDasharray = `${dashLength} ${CIRC - dashLength}`;
+          
+          // Поворот, который работает в твоем образце
+          const rotateDeg = 180 - (angleDeg / 2);
+          arc.style.transform = `rotate(${rotateDeg}deg)`;
+          
+          if (upgradeMult === 3) arc.style.stroke = '#6fcf97'; // Зеленый (30%)
+          else if (upgradeMult === 5) arc.style.stroke = '#f5d742'; // Желтый (20%)
+          else arc.style.stroke = '#eb5757'; // Красный (10%)
+        }
+      }
+
+      function playUpgrade() {
+        if (isSpinning) return;
+        if (balance < currentBet) {
+          setMessage('❌ Недостаточно средств! Пополни баланс.', 'lose');
+          return;
+        }
+
+        balance -= currentBet;
+        updateBalanceUI(false);
+        isSpinning = true;
+        spinBtn.disabled = true;
+        setMessage('Крутим... 🎡');
+
+        const pointerContainer = document.getElementById('wheelPointerContainer');
+        if (!pointerContainer) return;
+
+        pointerContainer.style.transition = 'transform 3s cubic-bezier(0.1, 0.7, 0.1, 1)';
+
+        const chance = getWinChancePercentage(upgradeMult);
+        const isWin = Math.random() < chance;
+        const angleDeg = 360 * chance;
+
+        let targetAngle = 0;
+
+        // Центр дуги находится ровно снизу (180 градусов для стрелки)
+        const zoneCenter = 180;
+        const halfZone = angleDeg / 2;
+
+        if (isWin) {
+          // Если выиграли, стрелка должна попасть ВНУТРЬ зоны
+          const randomOffset = (Math.random() - 0.5) * (angleDeg - 6); 
+          targetAngle = zoneCenter + randomOffset;
+        } else {
+          // Если проиграли, стрелка должна попасть ВНЕ зоны
+          const safeAngleSpace = 360 - angleDeg;
+          const randomOffset = Math.random() * safeAngleSpace;
+          targetAngle = zoneCenter + halfZone + 3 + randomOffset;
+        }
+
+        if (targetAngle >= 360) targetAngle -= 360;
+        if (targetAngle < 0) targetAngle += 360;
+
+        const baseRotations = 5 * 360; 
+        
+        let currentMod = upgradeRotation % 360;
+        let diff = targetAngle - currentMod;
+        if (diff < 0) diff += 360;
+        
+        upgradeRotation += baseRotations + diff;
+        
+        pointerContainer.style.transform = `rotate(${upgradeRotation}deg)`;
+
+        spinTimeout = setTimeout(() => {
+          if (isWin) {
+            const winAmount = currentBet * upgradeMult;
+            balance += winAmount;
+            updateBalanceUI(true);
+            
+            setMessage('🎉 УСПЕХ! Вы выиграли ' + formatMoney(winAmount) + ' (×' + upgradeMult + ')', 'jackpot');
+            
+            const center = getAreaCenter();
+            screenFlash();
+            shakeCasino();
+            createRipple(center.x, center.y);
+            spawnConfetti(center.x, center.y, 90, { colors: GOLD_COLORS, spread: 1.3 });
+            startConfettiRain(2600, GOLD_COLORS);
+          } else {
+            setMessage('😞 Не повезло! Ставка ' + formatMoney(currentBet) + ' потеряна.', 'lose');
+            shakeCasino();
+          }
+
+          // Задержка 300 мс
+          setTimeout(() => {
+            let currentMod = upgradeRotation % 360;
+            let remainder = currentMod === 0 ? 0 : 360 - currentMod;
+            
+            if (remainder < 10) remainder += 360;
+            
+            pointerContainer.style.transition = 'transform 0.4s ease-out';
+            
+            upgradeRotation += remainder;
+            pointerContainer.style.transform = `rotate(${upgradeRotation}deg)`;
+
+            setTimeout(() => {
+              isSpinning = false;
+              spinBtn.disabled = false;
+            }, 400);
+
+          }, 300);
+
+        }, 3000);
+      }
+
       spinBtn.addEventListener('click', () => {
         if (currentGame === 'slots') {
           playSpin();
-        } else {
-          if (!minesActive) {
-            startMines();
-          } else {
-            cashOutMines();
-          }
+        } else if (currentGame === 'mines') {
+          if (!minesActive) startMines(); else cashOutMines();
+        } else if (currentGame === 'upgrade') {
+          playUpgrade();
         }
       });
       
@@ -892,6 +1151,7 @@
           currentBet = Number(btn.dataset.bet);
           betButtons.forEach(b => b.classList.toggle('active', b === btn));
           setMessage('Ставка: ' + formatMoney(currentBet));
+          updateUpgradeLabels();
         });
       });
       
